@@ -110,7 +110,6 @@ console.log(
     "📩 /api/chat recebeu uma mensagem."
 );
 
-
 try {
 
     const { message } = req.body;
@@ -184,7 +183,7 @@ try {
     // =========================
 
     const url =
-        `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+        `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 
     console.log(
@@ -205,7 +204,10 @@ try {
             headers: {
 
                 "Content-Type":
-                    "application/json"
+                    "application/json",
+
+                "x-goog-api-key":
+                    GEMINI_API_KEY
 
             },
 
@@ -287,8 +289,10 @@ try {
         );
 
         return res.status(502).json({
+
             error:
                 "A API do Gemini não conseguiu processar a mensagem."
+
         });
 
     }
@@ -335,8 +339,10 @@ try {
         );
 
         return res.status(502).json({
+
             error:
                 "A IA retornou uma resposta vazia."
+
         });
 
     }
@@ -440,7 +446,8 @@ PORT,
 │  Brain:  ${GEMINI_API_KEY ? "ONLINE" : "OFFLINE"}
 │  Status: ONLINE                │
 ╰────────────────────────────────╯
-`);
+
+    `);
 
 }
 
