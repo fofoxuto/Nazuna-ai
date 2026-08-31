@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Nazuna AI</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head><body><div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-top">
+
+            <div class="brand">
+                <div class="brand-icon">N</div>
+
+                <div>
+                    <h1>Nazuna</h1>
+                    <span>AI Assistant</span>
+                </div>
+            </div>
+
+            <button class="new-chat" id="newChat">
+                <span>＋</span>
+                Nova conversa
+            </button>
+
+        </div>
+
+        <div class="history">
+
+            <p class="history-title">Conversas recentes</p>
+
+            <div class="history-list" id="historyList">
+                <button class="history-item active">
+                    <span>💬</span>
+                    Nova conversa
+                </button>
+            </div>
+
+        </div>
+
+        <div class="sidebar-bottom">
+
+            <button class="sidebar-button">
+                <span>⚙</span>
+                Configurações
+            </button>
+
+            <div class="user-card">
+                <div class="user-avatar">T</div>
+
+                <div class="user-info">
+                    <strong>Theus</strong>
+                    <span>Usuário</span>
+                </div>
+
+                <span class="more">•••</span>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- HEADER -->
+        <header class="topbar">
+
+            <button class="menu-button" id="menuButton">
+                ☰
+            </button>
+
+            <div class="mobile-brand">
+                <div class="brand-icon">N</div>
+                <strong>Nazuna</strong>
+            </div>
+
+            <div class="model">
+                <span class="status-dot"></span>
+                Nazuna AI
+            </div>
+
+            <button class="clear-button" id="clearChat">
+                Limpar
+            </button>
+
+        </header>
+
+
+        <!-- CHAT -->
+        <section class="chat" id="chat">
+
+            <div class="welcome" id="welcome">
+
+                <div class="welcome-icon">
+                    N
+                </div>
+
+                <h2>Oi, eu sou a Nazuna~</h2>
+
+                <p>
+                    Uma assistente virtual pronta pra conversar,
+                    responder perguntas e ajudar com ideias.
+                </p>
+
+                <div class="suggestions">
+
+                    <button class="suggestion" data-message="Me dê uma ideia de projeto para programar">
+                        <span>💡</span>
+                        Ideia de projeto
+                    </button>
+
+                    <button class="suggestion" data-message="Explique JavaScript de um jeito simples">
+                        <span>💻</span>
+                        Explicar programação
+                    </button>
+
+                    <button class="suggestion" data-message="Me recomende algumas músicas legais">
+                        <span>🎵</span>
+                        Recomendar músicas
+                    </button>
+
+                    <button class="suggestion" data-message="Me conte uma curiosidade interessante">
+                        <span>✨</span>
+                        Uma curiosidade
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="messages" id="messages"></div>
+
+        </section>
+
+
+        <!-- INPUT -->
+        <div class="input-area">
+
+            <form class="input-box" id="chatForm">
+
+                <textarea
+                    id="messageInput"
+                    placeholder="Digite uma mensagem..."
+                    rows="1"
+                    autocomplete="off"
+                ></textarea>
+
+                <button
+                    type="submit"
+                    class="send-button"
+                    id="sendButton"
+                    aria-label="Enviar mensagem"
+                >
+                    ↑
+                </button>
+
+            </form>
+
+            <p class="disclaimer">
+                Nazuna pode cometer erros. Verifique informações importantes.
+            </p>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
