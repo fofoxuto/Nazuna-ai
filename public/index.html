@@ -1,66 +1,124 @@
-<!DOCTYPE html><html lang="pt-BR">
-<head>
+<!DOCTYPE html><html lang="pt-BR"><head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Nazuna AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta
+    name="description"
+    content="Nazuna AI — uma assistente virtual simples, rápida e inteligente."
+>
 
+<meta name="theme-color" content="#09090b">
+
+<title>Nazuna AI</title>
+
+<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+>
+
+<!-- Styles -->
 <link rel="stylesheet" href="style.css">
 
 </head><body><div class="app">
 
-    <!-- SIDEBAR -->
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
     <aside class="sidebar" id="sidebar">
 
         <div class="sidebar-top">
 
             <div class="brand">
-                <div class="brand-icon">N</div>
+
+                <div class="brand-icon">
+                    N
+                </div>
 
                 <div>
                     <h1>Nazuna</h1>
                     <span>AI Assistant</span>
                 </div>
+
             </div>
 
-            <button class="new-chat" id="newChat">
+
+            <button
+                type="button"
+                class="new-chat"
+                id="newChat"
+            >
                 <span>＋</span>
                 Nova conversa
             </button>
 
         </div>
 
+
+        <!-- Histórico -->
+
         <div class="history">
 
-            <p class="history-title">Conversas recentes</p>
+            <p class="history-title">
+                Conversas recentes
+            </p>
 
-            <div class="history-list" id="historyList">
-                <button class="history-item active">
+            <div
+                class="history-list"
+                id="historyList"
+            >
+
+                <button
+                    type="button"
+                    class="history-item active"
+                >
                     <span>💬</span>
                     Nova conversa
                 </button>
+
             </div>
 
         </div>
 
+
+        <!-- Parte inferior -->
+
         <div class="sidebar-bottom">
 
-            <button class="sidebar-button">
+            <button
+                type="button"
+                class="sidebar-button"
+                id="settingsButton"
+            >
                 <span>⚙</span>
                 Configurações
             </button>
 
-            <div class="user-card">
-                <div class="user-avatar">T</div>
 
-                <div class="user-info">
-                    <strong>Theus</strong>
-                    <span>Usuário</span>
+            <div class="user-card">
+
+                <div class="user-avatar">
+                    T
                 </div>
 
-                <span class="more">•••</span>
+                <div class="user-info">
+
+                    <strong>
+                        Theus
+                    </strong>
+
+                    <span>
+                        Usuário
+                    </span>
+
+                </div>
+
+                <span class="more">
+                    •••
+                </span>
+
             </div>
 
         </div>
@@ -68,67 +126,133 @@
     </aside>
 
 
-    <!-- MAIN -->
+    <!-- =========================
+         MAIN
+    ========================== -->
+
     <main class="main">
 
         <!-- HEADER -->
+
         <header class="topbar">
 
-            <button class="menu-button" id="menuButton">
+            <button
+                type="button"
+                class="menu-button"
+                id="menuButton"
+                aria-label="Abrir menu"
+            >
                 ☰
             </button>
 
+
             <div class="mobile-brand">
-                <div class="brand-icon">N</div>
-                <strong>Nazuna</strong>
+
+                <div class="brand-icon">
+                    N
+                </div>
+
+                <strong>
+                    Nazuna
+                </strong>
+
             </div>
+
 
             <div class="model">
+
                 <span class="status-dot"></span>
-                Nazuna AI
+
+                <span>
+                    Nazuna AI
+                </span>
+
             </div>
 
-            <button class="clear-button" id="clearChat">
+
+            <button
+                type="button"
+                class="clear-button"
+                id="clearChat"
+            >
                 Limpar
             </button>
 
         </header>
 
 
-        <!-- CHAT -->
-        <section class="chat" id="chat">
+        <!-- =========================
+             CHAT
+        ========================== -->
 
-            <div class="welcome" id="welcome">
+        <section
+            class="chat"
+            id="chat"
+            aria-label="Conversa com Nazuna"
+        >
+
+            <!-- Tela inicial -->
+
+            <div
+                class="welcome"
+                id="welcome"
+            >
 
                 <div class="welcome-icon">
                     N
                 </div>
 
-                <h2>Oi, eu sou a Nazuna~</h2>
+
+                <h2>
+                    Oi, eu sou a Nazuna~
+                </h2>
+
 
                 <p>
                     Uma assistente virtual pronta pra conversar,
                     responder perguntas e ajudar com ideias.
                 </p>
 
+
+                <!-- Sugestões -->
+
                 <div class="suggestions">
 
-                    <button class="suggestion" data-message="Me dê uma ideia de projeto para programar">
+                    <button
+                        type="button"
+                        class="suggestion"
+                        data-message="Me dê uma ideia de projeto para programar"
+                    >
                         <span>💡</span>
                         Ideia de projeto
                     </button>
 
-                    <button class="suggestion" data-message="Explique JavaScript de um jeito simples">
+
+                    <button
+                        type="button"
+                        class="suggestion"
+                        data-message="Explique JavaScript de um jeito simples"
+                    >
                         <span>💻</span>
                         Explicar programação
                     </button>
 
-                    <button class="suggestion" data-message="Me recomende algumas músicas legais">
+
+                    <button
+                        type="button"
+                        class="suggestion"
+                        data-message="Me recomende algumas músicas legais"
+                    >
                         <span>🎵</span>
                         Recomendar músicas
                     </button>
 
-                    <button class="suggestion" data-message="Me conte uma curiosidade interessante">
+
+                    <button
+                        type="button"
+                        class="suggestion"
+                        data-message="Me conte uma curiosidade interessante"
+                    >
                         <span>✨</span>
                         Uma curiosidade
                     </button>
@@ -138,22 +262,37 @@
             </div>
 
 
-            <div class="messages" id="messages"></div>
+            <!-- Mensagens geradas pelo app.js -->
+
+            <div
+                class="messages"
+                id="messages"
+                aria-live="polite"
+            ></div>
 
         </section>
 
 
-        <!-- INPUT -->
+        <!-- =========================
+             INPUT
+        ========================== -->
+
         <div class="input-area">
 
-            <form class="input-box" id="chatForm">
+            <form
+                class="input-box"
+                id="chatForm"
+            >
 
                 <textarea
                     id="messageInput"
+                    name="message"
                     placeholder="Digite uma mensagem..."
                     rows="1"
                     autocomplete="off"
+                    aria-label="Mensagem"
                 ></textarea>
+
 
                 <button
                     type="submit"
@@ -166,8 +305,10 @@
 
             </form>
 
+
             <p class="disclaimer">
-                Nazuna pode cometer erros. Verifique informações importantes.
+                Nazuna pode cometer erros.
+                Verifique informações importantes.
             </p>
 
         </div>
@@ -176,7 +317,14 @@
 
 </div>
 
-<script src="script.js"></script>
 
-</body>
-</html>
+<!-- =========================
+     APP
+========================== -->
+
+<script
+    type="module"
+    src="app.js"
+></script>
+
+</body></html>
