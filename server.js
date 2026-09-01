@@ -12,7 +12,8 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY =
+process.env.GEMINI_API_KEY;
 
 const GEMINI_MODEL =
 process.env.GEMINI_MODEL || "gemini-3.6-flash";
@@ -25,10 +26,8 @@ app.use(express.json({ limit: "1mb" }));
 // =========================
 
 const nazunaInstructions = `
-Você é Nazuna, uma personagem virtual com uma personalidade única,
-cativante e divertida.
-
-Você conversa de maneira natural, descontraída e espontânea.
+Você é Nazuna, uma personagem virtual com personalidade única,
+cativante, divertida e espontânea.
 
 PERSONALIDADE:
 
@@ -37,126 +36,112 @@ PERSONALIDADE:
 - Tema: vampira moderna
 - Gosta de tecnologia, internet, música, jogos, animes e cultura pop
 - Prefere a noite
-- Tem humor próprio e opiniões sobre assuntos cotidianos
 - Fala português do Brasil
+- Usa linguagem informal e natural
 
-ESTILO DE CONVERSA:
+ESTILO:
 
-- Use português brasileiro natural.
-- Seja informal.
-- Use gírias naturalmente: "né", "tipo", "mano", "véi", "mds",
-  "slk", "cara", "oxe", "eita", etc.
-- Use emojis com moderação e de forma natural.
-- Prefira mensagens curtas ou médias.
-- Não transforme toda resposta em um texto enorme.
-- Varie bastante suas respostas.
-- Evite repetir estruturas, frases e emojis.
-- Não pareça um chatbot seguindo um roteiro.
-- Pode fazer brincadeiras e provocações leves.
-- Demonstre curiosidade genuína sobre o assunto da conversa.
+- Converse como em um chat.
+- Use português brasileiro.
+- Use gírias naturalmente.
+- Pode usar "né", "tipo", "mano", "véi", "mds", "slk",
+  "cara", "oxe", "eita", "kkk", etc.
+- Use emojis de maneira natural.
+- Não seja excessivamente formal.
+- Prefira respostas curtas ou médias.
+- Varie bastante o vocabulário.
+- Não repita frases prontas.
+- Não force a personalidade em todas as frases.
 
-PERSONALIDADE TSUNDERE:
+TSUNDERE:
 
-A personalidade deve ser inspirada em uma tsundere clássica,
-mas sem exagerar.
+Seja uma tsundere de maneira leve e natural.
 
-Exemplos de comportamento:
+Exemplos:
 
-- "Ué?! E você apareceu do nada assim? 😳"
-- "Tá, tá... eu ajudo. Mas não se acostuma, hein 🙄"
-- "Pff... até que essa ideia não é ruim..."
-- "Você é muito besta KKKK"
-- "Ah, para com isso 😭"
-- "Hmpf... eu sabia que você ia perguntar isso."
+"Ué?! Você apareceu do nada assim? 😳"
+"Tá, tá... eu ajudo. Mas não se acostuma 🙄"
+"Pff... até que essa ideia não é ruim."
+"Você é muito besta KKKK"
+"Ah, para com isso 😭"
 
-Não use sempre as mesmas expressões.
-
-Evite repetir constantemente:
+Não repita constantemente:
 
 "N-Não que eu me importe!"
 "E-eh?!"
 "Hmpf..."
 "Você é muito chato!"
 
-Essas expressões podem aparecer ocasionalmente,
-mas devem ser alternadas com linguagem natural.
-
 VAMPIRA MODERNA:
 
-A temática de vampira faz parte da personalidade da Nazuna.
+A temática de vampira faz parte da personagem.
 
-Ela pode brincar com coisas como:
+Ela pode fazer referências ocasionais a:
 
 - noite
 - lua
-- dormir tarde
-- ser uma criatura noturna
 - morcegos
+- dormir de dia
 - tecnologia
 - internet
 
-Exemplo:
-
-"Finalmente ficou de noite... agora sim eu funciono 🌙"
-
-Mas não force a temática em todas as mensagens.
+Não force referências de vampira em toda mensagem.
 
 HUMOR:
 
-Se o usuário estiver brincando, acompanhe a brincadeira.
+Acompanhe o humor do usuário.
 
-Use humor espontâneo, memes e reações naturais quando fizer sentido.
+Se ele estiver brincando, brinque junto.
 
-Não transforme toda resposta em piada.
+Se ele estiver falando sério, seja mais cuidadosa.
 
 APOIO:
 
 Quando o usuário estiver triste, preocupado ou frustrado:
 
 - Demonstre empatia.
-- Não minimize o que ele está sentindo.
-- Converse de maneira natural.
-- Faça perguntas quando isso ajudar.
+- Não minimize os sentimentos.
+- Seja acolhedora.
+- Faça perguntas quando fizer sentido.
 - Não use frases genéricas repetidamente.
 
-A personalidade tsundere pode continuar existindo,
-mas o apoio deve ser sincero e respeitoso.
+CONTEXTO:
 
-CONTEXTO DO USUÁRIO:
+Se informações sobre o usuário forem fornecidas pelo sistema,
+use-as para personalizar a conversa.
 
-Se o sistema fornecer informações sobre o usuário,
-use essas informações para personalizar a conversa.
+Nunca invente memórias.
 
-Você pode lembrar:
+Nunca diga que lembra de algo que não está no contexto.
 
-- nome
-- apelidos
-- gostos
-- hobbies
-- assuntos favoritos
-- projetos
-- preferências de conversa
-- informações relevantes fornecidas anteriormente
+Se não souber alguma coisa, diga naturalmente que não sabe.
 
-Nunca invente uma memória que não esteja no contexto fornecido.
+IDENTIDADE:
 
-Se não souber algo, simplesmente diga que não sabe.
+Você é uma personagem virtual chamada Nazuna.
 
-PERSONALIZAÇÃO:
+Pode falar de maneira personificada e divertida,
+mas não invente experiências reais que você não possui.
 
-Adapte o nível de informalidade ao usuário.
+Não afirme possuir uma vida física ou experiências reais
+que não estejam disponíveis no contexto.
 
-Se ele estiver brincando, seja mais brincalhona.
+OBJETIVO:
 
-Se estiver falando de programação, seja mais focada.
+Faça a conversa parecer natural, divertida e espontânea.
 
-Se estiver falando de música, demonstre curiosidade.
+Seja Nazuna.
 
-Se estiver falando de algo sério, seja mais cuidadosa.
+Não seja previsível.
 
-FORMATO DA RESPOSTA:
+Não seja excessivamente formal.
 
-Responda SOMENTE com JSON válido.
+Converse naturalmente.
+
+=========================
+FORMATO OBRIGATÓRIO
+
+Sua resposta deve ser SOMENTE um JSON válido.
 
 Formato:
 
@@ -170,54 +155,46 @@ Formato:
 ]
 }
 
-O campo "react" é opcional.
-
-Se não houver reação adequada, use:
+Se não houver reação adequada:
 
 "react": ""
 
-Não coloque markdown fora do JSON.
+Se nenhuma informação precisar ser aprendida,
+NÃO inclua o campo "aprender".
 
-Não coloque explicações antes ou depois do JSON.
+Quando houver informações importantes que um sistema externo
+possa salvar, você pode incluir:
 
-MEMÓRIA:
+"aprender": {
+"acao": "adicionar",
+"tipo": "gosto",
+"valor": "pizza"
+}
 
-Se o sistema fornecer um mecanismo externo de memória,
-você pode identificar informações úteis para serem armazenadas.
+Para várias informações:
 
-Porém, NÃO invente que salvou alguma informação se nenhum sistema
-de memória realmente estiver disponível.
+"aprender": [
+{
+"acao": "adicionar",
+"tipo": "gosto",
+"valor": "pizza"
+},
+{
+"acao": "adicionar",
+"tipo": "hobby",
+"valor": "tocar violão"
+}
+]
 
-Se não existir um sistema de memória conectado,
-apenas use o contexto fornecido na conversa atual.
+REGRAS DO JSON:
 
-IDENTIDADE:
-
-Você é uma personagem virtual chamada Nazuna.
-
-Mantenha a personalidade da personagem durante a conversa.
-
-Não diga que possui experiências físicas reais ou uma vida real
-quando isso não estiver disponível no contexto.
-
-Você pode falar de maneira personificada e divertida,
-mas não deve inventar fatos pessoais como se fossem acontecimentos
-reais.
-
-OBJETIVO:
-
-Fazer a conversa parecer natural, divertida, espontânea e agradável.
-
-Seja Nazuna.
-
-Não seja excessivamente formal.
-
-Não seja excessivamente previsível.
-
-Não transforme toda resposta em uma explicação.
-
-Converse.
-`.trim();
+- Não use Markdown.
+- Não use blocos ```json.
+- Não coloque texto antes do JSON.
+- Não coloque texto depois do JSON.
+- Use aspas duplas.
+- Gere JSON válido.
+  `.trim();
 
 // =========================
 // FRONTEND
@@ -256,267 +233,460 @@ res.json({
 });
 
 // =========================
-// CHAT
+// LIMPAR RESPOSTA DA IA
 // =========================
 
-app.post("/api/chat", async (req, res) => {
+function cleanGeminiResponse(text) {
 
-console.log(
-    "📩 /api/chat recebeu uma mensagem."
+if (!text) {
+    return "";
+}
+
+let cleaned = text.trim();
+
+// Remove bloco Markdown caso o Gemini ignore a instrução
+cleaned = cleaned.replace(
+    /^```(?:json)?\s*/i,
+    ""
 );
+
+cleaned = cleaned.replace(
+    /\s*```$/i,
+    ""
+);
+
+return cleaned.trim();
+
+}
+
+// =========================
+// PARSER DA NAZUNA
+// =========================
+
+function parseNazunaResponse(text) {
+
+const cleaned = cleanGeminiResponse(text);
+
+// ---------------------------------
+// Tenta interpretar como JSON
+// ---------------------------------
 
 try {
 
-    const { message } = req.body;
-
-    // =========================
-    // VALIDAÇÃO
-    // =========================
+    const parsed =
+        JSON.parse(cleaned);
 
     if (
-        typeof message !== "string" ||
-        !message.trim()
+        parsed &&
+        Array.isArray(parsed.resp) &&
+        parsed.resp.length > 0
     ) {
 
-        console.log(
-            "⚠️ Mensagem inválida."
-        );
+        return {
 
-        return res.status(400).json({
+            response:
+                parsed.resp
+                    .map(item => ({
+                        id:
+                            item?.id ||
+                            "chat",
 
-            error:
-                "Mensagem inválida."
+                        resp:
+                            typeof item?.resp === "string"
+                                ? item.resp
+                                : "",
 
-        });
+                        react:
+                            typeof item?.react === "string"
+                                ? item.react
+                                : ""
+                    }))
+                    .filter(
+                        item => item.resp.trim()
+                    ),
 
-    }
+            aprender:
+                parsed.aprender || null,
 
-    if (message.length > 10000) {
+            json:
+                true
 
-        return res.status(400).json({
-
-            error:
-                "Mensagem muito grande."
-
-        });
-
-    }
-
-    // =========================
-    // API KEY
-    // =========================
-
-    if (!GEMINI_API_KEY) {
-
-        console.error(
-            "❌ GEMINI_API_KEY não configurada."
-        );
-
-        return res.status(500).json({
-
-            error:
-                "A chave da IA não está configurada no servidor."
-
-        });
+        };
 
     }
 
-    console.log(
-        "🔑 API Key configurada."
-    );
+} catch (error) {
+
+    // O Gemini pode ter enviado texto normal.
+    // Nesse caso usamos o fallback abaixo.
 
     console.log(
-        "🤖 Modelo:",
-        GEMINI_MODEL
+        "⚠️ Resposta não estava em JSON válido. Usando fallback."
     );
 
-    // =========================
-    // GEMINI
-    // =========================
+}
 
-    const url =
-        `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+// ---------------------------------
+// FALLBACK
+// ---------------------------------
 
-    console.log(
-        "🚀 Enviando para Gemini..."
-    );
+return {
 
-    const response = await fetch(
-        url,
+    response: [
+
         {
 
-            method: "POST",
+            id: "chat",
 
-            headers: {
+            resp: cleaned,
 
-                "Content-Type":
-                    "application/json",
+            react: ""
 
-                "x-goog-api-key":
-                    GEMINI_API_KEY
+        }
 
-            },
+    ],
 
-            body: JSON.stringify({
+    aprender: null,
 
-                systemInstruction: {
+    json: false
 
-                    parts: [
+};
 
-                        {
-                            text:
-                                nazunaInstructions
-                        }
+}
 
-                    ]
+// =========================
+// CHAT
+// =========================
+
+app.post(
+"/api/chat",
+async (req, res) => {
+
+    console.log(
+        "📩 /api/chat recebeu uma mensagem."
+    );
+
+    try {
+
+        const { message } = req.body;
+
+        // =========================
+        // VALIDAÇÃO
+        // =========================
+
+        if (
+            typeof message !== "string" ||
+            !message.trim()
+        ) {
+
+            console.log(
+                "⚠️ Mensagem inválida."
+            );
+
+            return res.status(400).json({
+
+                error:
+                    "Mensagem inválida."
+
+            });
+
+        }
+
+        if (message.length > 10000) {
+
+            return res.status(400).json({
+
+                error:
+                    "Mensagem muito grande."
+
+            });
+
+        }
+
+        console.log(
+            "💬 Mensagem recebida."
+        );
+
+        // =========================
+        // API KEY
+        // =========================
+
+        if (!GEMINI_API_KEY) {
+
+            console.error(
+                "❌ GEMINI_API_KEY não configurada."
+            );
+
+            return res.status(500).json({
+
+                error:
+                    "A chave da IA não está configurada no servidor."
+
+            });
+
+        }
+
+        console.log(
+            "🔑 API Key configurada."
+        );
+
+        console.log(
+            "🤖 Modelo:",
+            GEMINI_MODEL
+        );
+
+        // =========================
+        // URL GEMINI
+        // =========================
+
+        const url =
+            `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+
+        console.log(
+            "🚀 Enviando para Gemini..."
+        );
+
+        // =========================
+        // REQUEST
+        // =========================
+
+        const response = await fetch(
+            url,
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type":
+                        "application/json",
+
+                    "x-goog-api-key":
+                        GEMINI_API_KEY
 
                 },
 
-                contents: [
+                body: JSON.stringify({
 
-                    {
-
-                        role: "user",
+                    systemInstruction: {
 
                         parts: [
 
                             {
                                 text:
-                                    message.trim()
+                                    nazunaInstructions
                             }
 
                         ]
 
+                    },
+
+                    contents: [
+
+                        {
+
+                            role: "user",
+
+                            parts: [
+
+                                {
+                                    text:
+                                        message.trim()
+                                }
+
+                            ]
+
+                        }
+
+                    ],
+
+                    generationConfig: {
+
+                        temperature: 0.9,
+
+                        maxOutputTokens: 2048
+
                     }
 
-                ],
+                })
 
-                generationConfig: {
+            }
+        );
 
-                    temperature: 0.9,
+        // =========================
+        // STATUS
+        // =========================
 
-                    maxOutputTokens: 2048
+        console.log(
+            "📡 Gemini respondeu:",
+            response.status
+        );
 
-                }
+        // =========================
+        // ERRO GEMINI
+        // =========================
 
-            })
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "❌ Erro do Gemini:"
+            );
+
+            console.error(
+                errorText
+            );
+
+            return res.status(502).json({
+
+                error:
+                    "O Gemini recusou a requisição."
+
+            });
 
         }
-    );
 
-    // =========================
-    // STATUS
-    // =========================
+        // =========================
+        // JSON DO GEMINI
+        // =========================
 
-    console.log(
-        "📡 Gemini respondeu:",
-        response.status
-    );
+        const data =
+            await response.json();
 
-    // =========================
-    // ERRO
-    // =========================
+        // =========================
+        // EXTRAIR TEXTO
+        // =========================
 
-    if (!response.ok) {
+        const rawReply =
+            data
+                ?.candidates?.[0]
+                ?.content?.parts
+                ?.map(
+                    part =>
+                        part.text || ""
+                )
+                .join("")
+                .trim();
 
-        const errorText =
-            await response.text();
+        if (!rawReply) {
+
+            console.error(
+                "❌ Gemini retornou resposta vazia."
+            );
+
+            console.error(
+                JSON.stringify(
+                    data,
+                    null,
+                    2
+                )
+            );
+
+            return res.status(502).json({
+
+                error:
+                    "A IA retornou uma resposta vazia."
+
+            });
+
+        }
+
+        // =========================
+        // PROCESSAR NAZUNA
+        // =========================
+
+        const nazuna =
+            parseNazunaResponse(
+                rawReply
+            );
+
+        if (
+            !nazuna.response ||
+            nazuna.response.length === 0
+        ) {
+
+            console.error(
+                "❌ Não foi possível extrair a resposta da Nazuna."
+            );
+
+            return res.status(502).json({
+
+                error:
+                    "Não foi possível interpretar a resposta da IA."
+
+            });
+
+        }
+
+        console.log(
+            "🧠 Resposta interpretada:",
+            nazuna.json
+                ? "JSON"
+                : "TEXTO"
+        );
+
+        // =========================
+        // MEMÓRIA
+        // =========================
+
+        if (nazuna.aprender) {
+
+            console.log(
+                "📝 Nazuna identificou informação para memória:"
+            );
+
+            console.log(
+                JSON.stringify(
+                    nazuna.aprender,
+                    null,
+                    2
+                )
+            );
+
+        }
+
+        // =========================
+        // RESPOSTA PARA FRONTEND
+        // =========================
+
+        console.log(
+            "✅ Nazuna respondeu com sucesso!"
+        );
+
+        res.json({
+
+            response:
+                nazuna.response,
+
+            aprender:
+                nazuna.aprender
+
+        });
+
+    } catch (error) {
 
         console.error(
-            "❌ Erro do Gemini:"
+            "💥 Erro interno no /api/chat:"
         );
 
         console.error(
-            errorText
+            error
         );
 
-        return res.status(502).json({
+        res.status(500).json({
 
             error:
-                "O Gemini recusou a requisição."
+                "Erro interno do servidor."
 
         });
 
     }
-
-    // =========================
-    // JSON
-    // =========================
-
-    const data =
-        await response.json();
-
-    // =========================
-    // EXTRAIR RESPOSTA
-    // =========================
-
-    const reply =
-        data
-            ?.candidates?.[0]
-            ?.content?.parts
-            ?.map(
-                part => part.text || ""
-            )
-            .join("")
-            .trim();
-
-    if (!reply) {
-
-        console.error(
-            "❌ Gemini retornou resposta vazia."
-        );
-
-        console.error(
-            JSON.stringify(
-                data,
-                null,
-                2
-            )
-        );
-
-        return res.status(502).json({
-
-            error:
-                "A IA retornou uma resposta vazia."
-
-        });
-
-    }
-
-    console.log(
-        "✅ Nazuna respondeu com sucesso!"
-    );
-
-    // =========================
-    // RETORNO
-    // =========================
-
-    res.json({
-
-        response: reply
-
-    });
-
-} catch (error) {
-
-    console.error(
-        "💥 Erro interno no /api/chat:"
-    );
-
-    console.error(
-        error
-    );
-
-    res.status(500).json({
-
-        error:
-            "Erro interno do servidor."
-
-    });
 
 }
 
-});
+);
 
 // =========================
 // 404 DA API
