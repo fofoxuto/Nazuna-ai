@@ -36,11 +36,9 @@ let nazunaInstructions = "";
 
 try {
 
-nazunaInstructions =
-    fs.readFileSync(
-        instructionsPath,
-        "utf8"
-    ).trim();
+nazunaInstructions = fs
+    .readFileSync(instructionsPath, "utf8")
+    .trim();
 
 console.log(
     "🧠 Instruções da Nazuna carregadas."
@@ -49,17 +47,12 @@ console.log(
 } catch (error) {
 
 console.error(
-    "⚠️ Não foi possível carregar nazuna.txt:",
+    "⚠️ nazuna.txt não encontrado:",
     error.message
 );
 
-nazunaInstructions = `
-
-Você é Nazuna, uma assistente virtual amigável,
-divertida e útil.
-
-Responda em português do Brasil.
-`.trim();
+nazunaInstructions =
+    "Você é Nazuna, uma assistente virtual amigável, divertida e útil. Responda em português do Brasil.";
 
 }
 
@@ -91,10 +84,7 @@ res.json({
         Boolean(nazunaInstructions),
 
     apiKeyConfigured:
-        Boolean(GEMINI_API_KEY),
-
-    timestamp:
-        new Date().toISOString()
+        Boolean(GEMINI_API_KEY)
 
 });
 
@@ -120,14 +110,9 @@ try {
     // =========================
 
     if (
-        !message ||
         typeof message !== "string" ||
         !message.trim()
     ) {
-
-        console.log(
-            "⚠️ Mensagem inválida."
-        );
 
         return res.status(400).json({
             error: "Mensagem inválida."
@@ -145,11 +130,6 @@ try {
     }
 
 
-    console.log(
-        "💬 Mensagem recebida."
-    );
-
-
     // =========================
     // API KEY
     // =========================
@@ -157,12 +137,12 @@ try {
     if (!GEMINI_API_KEY) {
 
         console.error(
-            "❌ GEMINI_API_KEY não encontrada."
+            "❌ GEMINI_API_KEY não configurada."
         );
 
         return res.status(500).json({
             error:
-                "A chave da IA não está configurada no servidor."
+                "A chave da IA não está configurada."
         });
 
     }
@@ -179,7 +159,7 @@ try {
 
 
     // =========================
-    // URL GEMINI
+    // GEMINI
     // =========================
 
     const url =
@@ -187,13 +167,9 @@ try {
 
 
     console.log(
-        "🚀 Enviando mensagem para Gemini..."
+        "🚀 Enviando para Gemini..."
     );
 
-
-    // =========================
-    // REQUEST
-    // =========================
 
     const response = await fetch(
         url,
@@ -213,20 +189,6 @@ try {
 
             body: JSON.stringify({
 
-                systemInstruction: {
-
-                    parts: [
-
-                        {
-                            text:
-                                nazunaInstructions
-                        }
-
-                    ]
-
-                },
-
-
                 contents: [
 
                     {
@@ -236,8 +198,10 @@ try {
                         parts: [
 
                             {
+
                                 text:
-                                    message.trim()
+                                    `${nazunaInstructions}\n\nMensagem do usuário:\n${message.trim()}`
+
                             }
 
                         ]
@@ -245,7 +209,6 @@ try {
                     }
 
                 ],
-
 
                 generationConfig: {
 
@@ -272,7 +235,7 @@ try {
 
 
     // =========================
-    // ERRO GEMINI
+    // ERRO
     // =========================
 
     if (!response.ok) {
@@ -281,7 +244,7 @@ try {
             await response.text();
 
         console.error(
-            "❌ Erro retornado pelo Gemini:"
+            "❌ Erro do Gemini:"
         );
 
         console.error(
@@ -291,7 +254,7 @@ try {
         return res.status(502).json({
 
             error:
-                "A API do Gemini não conseguiu processar a mensagem."
+                "O Gemini recusou a requisição."
 
         });
 
@@ -306,20 +269,17 @@ try {
         await response.json();
 
 
-    console.log(
-        "📦 Resposta do Gemini recebida."
-    );
-
-
     // =========================
-    // EXTRAIR RESPOSTA
+    // RESPOSTA
     // =========================
 
     const reply =
         data
             ?.candidates?.[0]
             ?.content?.parts
-            ?.map(part => part.text || "")
+            ?.map(
+                part => part.text || ""
+            )
             .join("")
             .trim();
 
@@ -327,7 +287,7 @@ try {
     if (!reply) {
 
         console.error(
-            "❌ Gemini retornou uma resposta vazia."
+            "❌ Gemini retornou resposta vazia."
         );
 
         console.error(
@@ -348,12 +308,8 @@ try {
     }
 
 
-    // =========================
-    // RESPOSTA
-    // =========================
-
     console.log(
-        "✅ Resposta gerada com sucesso."
+        "✅ Nazuna respondeu com sucesso!"
     );
 
 
@@ -367,13 +323,9 @@ try {
 } catch (error) {
 
     console.error(
-        "💥 Erro interno no /api/chat:"
-    );
-
-    console.error(
+        "💥 Erro interno:",
         error
     );
-
 
     res.status(500).json({
 
@@ -387,7 +339,7 @@ try {
 });
 
 // =========================
-// 404 DA API
+// 404 API
 // =========================
 
 app.use(
@@ -398,29 +350,6 @@ app.use(
 
         error:
             "Endpoint não encontrado."
-
-    });
-
-}
-
-);
-
-// =========================
-// ERRO GLOBAL
-// =========================
-
-app.use(
-(error, req, res, next) => {
-
-    console.error(
-        "💥 Erro não tratado:",
-        error
-    );
-
-    res.status(500).json({
-
-        error:
-            "Erro interno do servidor."
 
     });
 
