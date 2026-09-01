@@ -42,7 +42,7 @@ messageInput.style.height =
 MENSAGENS
 ========================= */
 
-function addMessage(content, type) {
+function addMessage(content, type, react = "") {
 
 welcome.style.display = "none";
 
@@ -63,10 +63,30 @@ name.textContent = type === "ai" ? "Nazuna" : "Você";
 const text = document.createElement("div");
 text.className = "message-text";
 
-text.textContent = content;
+// Garante que nunca apareça [object Object]
+if (typeof content === "string") {
+    text.textContent = content;
+} else {
+    text.textContent = String(content ?? "");
+}
 
 messageContent.appendChild(name);
 messageContent.appendChild(text);
+
+// =========================
+// REAÇÃO
+// =========================
+
+if (react && typeof react === "string") {
+
+    const reaction = document.createElement("div");
+
+    reaction.className = "message-reaction";
+
+    reaction.textContent = react;
+
+    messageContent.appendChild(reaction);
+}
 
 message.appendChild(avatar);
 message.appendChild(messageContent);
@@ -145,17 +165,19 @@ const response = await fetch("/api/chat", {
 
 });
 
-
 let data;
 
 try {
+
     data = await response.json();
+
 } catch {
+
     throw new Error(
         "O servidor retornou uma resposta inválida."
     );
-}
 
+}
 
 if (!response.ok) {
 
@@ -166,8 +188,98 @@ if (!response.ok) {
 
 }
 
+return data;
 
-return data.response;
+}
+
+/* =========================
+PROCESSAR RESPOSTA
+========================= */
+
+function displayAIResponse(data) {
+
+/*
+    Formato esperado do backend:
+
+    {
+        response: [
+            {
+                id: "chat",
+                resp: "Olá!",
+                react: "👋"
+            }
+        ],
+        aprender: null
+    }
+*/
+
+const response = data?.response;
+
+// =========================
+// NOVO FORMATO
+// =========================
+
+if (Array.isArray(response)) {
+
+    response.forEach(item => {
+
+        if (!item) {
+            return;
+        }
+
+        const text =
+            typeof item.resp === "string"
+                ? item.resp
+                : "";
+
+        const react =
+            typeof item.react === "string"
+                ? item.react
+                : "";
+
+        if (text.trim()) {
+
+            addMessage(
+                text,
+                "ai",
+                react
+            );
+
+        }
+
+    });
+
+    return;
+}
+
+// =========================
+// COMPATIBILIDADE
+// =========================
+
+// Caso o backend antigo ainda retorne uma string
+
+if (typeof response === "string") {
+
+    addMessage(
+        response,
+        "ai"
+    );
+
+    return;
+}
+
+// =========================
+// RESPOSTA INVÁLIDA
+// =========================
+
+console.error(
+    "Resposta inesperada da API:",
+    data
+);
+
+throw new Error(
+    "A resposta da Nazuna veio em um formato inesperado."
+);
 
 }
 
@@ -183,7 +295,6 @@ if (!message || isLoading) {
     return;
 }
 
-
 addMessage(message, "user");
 
 messageInput.value = "";
@@ -194,16 +305,27 @@ sendButton.disabled = true;
 
 showTyping();
 
-
 try {
 
-    const response =
+    const data =
         await sendToAI(message);
 
     removeTyping();
 
-    addMessage(response, "ai");
+    displayAIResponse(data);
 
+    // =========================
+    // MEMÓRIA
+    // =========================
+
+    if (data?.aprender) {
+
+        console.log(
+            "🧠 Informação identificada para memória:",
+            data.aprender
+        );
+
+    }
 
 } catch (error) {
 
@@ -214,16 +336,15 @@ try {
         error
     );
 
-
     addMessage(
         "Não consegui falar com meu cérebro agora 😭~ Tenta novamente daqui a pouco.",
         "ai"
     );
 
-
 } finally {
 
     isLoading = false;
+
     sendButton.disabled = false;
 
     messageInput.focus();
@@ -242,7 +363,9 @@ event => {
 
     event.preventDefault();
 
-    sendMessage(messageInput.value);
+    sendMessage(
+        messageInput.value
+    );
 
 }
 
@@ -374,7 +497,9 @@ event => {
     document
         .querySelectorAll(".history-item")
         .forEach(button => {
+
             button.classList.remove("active");
+
         });
 
     item.classList.add("active");
@@ -393,4 +518,6 @@ autoResizeInput();
 
 messageInput.focus();
 
-console.log("Nazuna AI frontend carregado ✨");
+console.log(
+"Nazuna AI frontend carregado ✨"
+);
