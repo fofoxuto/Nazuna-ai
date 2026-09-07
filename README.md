@@ -166,7 +166,7 @@ Atualmente, essa informação permanece apenas no frontend e **não é enviada a
 ### 1. Clone o repositório
 
 ````bash
-git clone SEU_REPOSITORIO
+git clone https://github.com/fofoxuto/Nazuna-ai.git
 ````
 
 Depois entre na pasta:
