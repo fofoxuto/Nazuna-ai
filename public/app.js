@@ -38,30 +38,331 @@ const suggestions =
 const historyList =
     document.getElementById("historyList");
 
+
+// =========================
+// ESTADO
+// =========================
+
 let isLoading = false;
+
+
+// =========================
+// NOME DO USUÁRIO
+// =========================
+
+const USER_NAME_KEY =
+    "nazunaUserName";
+
+let userName =
+    localStorage.getItem(
+        USER_NAME_KEY
+    );
+
+
+// =========================
+// CONFIGURAR NOME
+// =========================
+
+function saveUserName(name) {
+
+    const cleanName =
+        name.trim();
+
+    if (!cleanName) {
+
+        return false;
+
+    }
+
+    userName =
+        cleanName;
+
+    localStorage.setItem(
+        USER_NAME_KEY,
+        userName
+    );
+
+    return true;
+
+}
+
+
+// =========================
+// MODAL DE NOME
+// =========================
+
+function showNameModal() {
+
+    // Se já existe nome,
+    // não precisa perguntar novamente.
+
+    if (userName) {
+
+        return;
+
+    }
+
+
+    // =========================
+    // OVERLAY
+    // =========================
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className =
+        "name-modal-overlay";
+
+
+    // =========================
+    // MODAL
+    // =========================
+
+    const modal =
+        document.createElement("div");
+
+    modal.className =
+        "name-modal";
+
+
+    // =========================
+    // TÍTULO
+    // =========================
+
+    const title =
+        document.createElement("h2");
+
+    title.textContent =
+        "Como posso te chamar? 💜";
+
+
+    // =========================
+    // DESCRIÇÃO
+    // =========================
+
+    const description =
+        document.createElement("p");
+
+    description.textContent =
+        "Só pra eu saber como chamar você por aqui.";
+
+
+    // =========================
+    // INPUT
+    // =========================
+
+    const input =
+        document.createElement("input");
+
+    input.type =
+        "text";
+
+    input.placeholder =
+        "Insira seu nome...";
+
+    input.maxLength =
+        40;
+
+    input.autocomplete =
+        "name";
+
+
+    // =========================
+    // BOTÃO
+    // =========================
+
+    const button =
+        document.createElement("button");
+
+    button.type =
+        "button";
+
+    button.textContent =
+        "Continuar";
+
+
+    // =========================
+    // FUNÇÃO CONFIRMAR
+    // =========================
+
+    function confirmName() {
+
+        const name =
+            input.value.trim();
+
+        if (!name) {
+
+            input.focus();
+
+            input.classList.add(
+                "invalid"
+            );
+
+            return;
+
+        }
+
+        if (
+            !saveUserName(name)
+        ) {
+
+            return;
+
+        }
+
+        overlay.classList.add(
+            "closing"
+        );
+
+        setTimeout(
+            () => {
+
+                overlay.remove();
+
+                messageInput.focus();
+
+            },
+            180
+        );
+
+    }
+
+
+    // =========================
+    // ENTER
+    // =========================
+
+    input.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+                confirmName();
+
+            }
+
+        }
+    );
+
+
+    // =========================
+    // REMOVER ERRO AO DIGITAR
+    // =========================
+
+    input.addEventListener(
+        "input",
+        () => {
+
+            input.classList.remove(
+                "invalid"
+            );
+
+        }
+    );
+
+
+    // =========================
+    // BOTÃO
+    // =========================
+
+    button.addEventListener(
+        "click",
+        confirmName
+    );
+
+
+    // =========================
+    // MONTAR
+    // =========================
+
+    modal.appendChild(
+        title
+    );
+
+    modal.appendChild(
+        description
+    );
+
+    modal.appendChild(
+        input
+    );
+
+    modal.appendChild(
+        button
+    );
+
+    overlay.appendChild(
+        modal
+    );
+
+    document.body.appendChild(
+        overlay
+    );
+
+
+    // =========================
+    // ANIMAÇÃO
+    // =========================
+
+    requestAnimationFrame(
+        () => {
+
+            overlay.classList.add(
+                "visible"
+            );
+
+            input.focus();
+
+        }
+    );
+
+}
+
+
+// =========================
+// PEGAR NOME
+// =========================
+
+function getUserName() {
+
+    return (
+        userName ||
+        "Você"
+    );
+
+}
 
 
 // =========================
 // UTILIDADES
 // =========================
 
-function scrollToBottom(smooth = true) {
+function scrollToBottom(
+    smooth = true
+) {
 
-    requestAnimationFrame(() => {
+    requestAnimationFrame(
+        () => {
 
-        chat.scrollTo({
+            chat.scrollTo({
 
-            top:
-                chat.scrollHeight,
+                top:
+                    chat.scrollHeight,
 
-            behavior:
-                smooth
-                    ? "smooth"
-                    : "auto"
+                behavior:
+                    smooth
+                        ? "smooth"
+                        : "auto"
 
-        });
+            });
 
-    });
+        }
+    );
 
 }
 
@@ -93,6 +394,7 @@ function addMessage(
     welcome.style.display =
         "none";
 
+
     const message =
         document.createElement("div");
 
@@ -113,7 +415,11 @@ function addMessage(
     avatar.textContent =
         type === "ai"
             ? "N"
-            : "T";
+            : (
+                getUserName()
+                    .charAt(0)
+                    .toUpperCase()
+            );
 
 
     // =========================
@@ -140,7 +446,7 @@ function addMessage(
     name.textContent =
         type === "ai"
             ? "Nazuna"
-            : "Você";
+            : getUserName();
 
 
     // =========================
@@ -161,9 +467,13 @@ function addMessage(
             );
 
 
-    messageContent.appendChild(name);
+    messageContent.appendChild(
+        name
+    );
 
-    messageContent.appendChild(text);
+    messageContent.appendChild(
+        text
+    );
 
 
     // =========================
@@ -230,6 +540,7 @@ function showTyping() {
         return;
 
     }
+
 
     const typing =
         document.createElement("div");
@@ -402,28 +713,37 @@ function displayAIResponse(data) {
             item => {
 
                 if (!item) {
+
                     return;
+
                 }
+
 
                 const text =
                     typeof item.resp === "string"
                         ? item.resp.trim()
                         : "";
 
+
                 if (!text) {
+
                     return;
+
                 }
+
 
                 const react =
                     typeof item.react === "string"
                         ? item.react
                         : "";
 
+
                 addMessage(
                     text,
                     "ai",
                     react
                 );
+
 
                 displayed =
                     true;
@@ -708,6 +1028,7 @@ suggestions.forEach(
 
                 }
 
+
                 const message =
                     button.dataset.message;
 
@@ -860,7 +1181,21 @@ historyList.addEventListener(
 
 autoResizeInput();
 
-messageInput.focus();
+
+// =========================
+// NOME
+// =========================
+
+if (!userName) {
+
+    showNameModal();
+
+} else {
+
+    messageInput.focus();
+
+}
+
 
 console.log(
     "🌙 Nazuna AI frontend carregado."
