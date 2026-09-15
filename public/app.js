@@ -46,6 +46,15 @@ const suggestions =
 const historyList =
     document.getElementById("historyList");
 
+const settingsButton =
+    document.getElementById("settingsButton");
+
+const userNameElement =
+    document.getElementById("userName");
+
+const userAvatarElement =
+    document.getElementById("userAvatar");
+
 
 // =========================
 // ESTADO
@@ -68,7 +77,10 @@ function getUserId() {
             USER_ID_KEY
         );
 
-    if (id) {
+    if (
+        id &&
+        /^[a-f0-9-]{36}$/i.test(id)
+    ) {
 
         return id;
 
@@ -108,14 +120,54 @@ let userName =
     );
 
 
+function getUserName() {
+
+    return (
+        userName ||
+        "Você"
+    );
+
+}
+
+
 // =========================
-// CONFIGURAR NOME
+// ATUALIZAR INTERFACE DO USUÁRIO
+// =========================
+
+function updateUserUI() {
+
+    const name =
+        getUserName();
+
+    if (userNameElement) {
+
+        userNameElement.textContent =
+            name;
+
+    }
+
+    if (userAvatarElement) {
+
+        userAvatarElement.textContent =
+            name
+                .charAt(0)
+                .toUpperCase();
+
+    }
+
+}
+
+
+// =========================
+// SALVAR NOME
 // =========================
 
 function saveUserName(name) {
 
     const cleanName =
-        name.trim();
+        name
+            .trim()
+            .slice(0, 40);
 
     if (!cleanName) {
 
@@ -130,6 +182,8 @@ function saveUserName(name) {
         USER_NAME_KEY,
         userName
     );
+
+    updateUserUI();
 
     return true;
 
@@ -163,11 +217,21 @@ function showNameModal() {
         "name-modal";
 
 
+    const icon =
+        document.createElement("div");
+
+    icon.className =
+        "name-modal-icon";
+
+    icon.textContent =
+        "N";
+
+
     const title =
         document.createElement("h2");
 
     title.textContent =
-        "Como posso te chamar? 💜";
+        "Como posso te chamar?";
 
 
     const description =
@@ -220,9 +284,7 @@ function showNameModal() {
 
         }
 
-        if (
-            !saveUserName(name)
-        ) {
+        if (!saveUserName(name)) {
 
             return;
 
@@ -283,6 +345,10 @@ function showNameModal() {
 
 
     modal.appendChild(
+        icon
+    );
+
+    modal.appendChild(
         title
     );
 
@@ -317,20 +383,6 @@ function showNameModal() {
             input.focus();
 
         }
-    );
-
-}
-
-
-// =========================
-// PEGAR NOME
-// =========================
-
-function getUserName() {
-
-    return (
-        userName ||
-        "Você"
     );
 
 }
@@ -409,11 +461,9 @@ function addMessage(
     avatar.textContent =
         type === "ai"
             ? "N"
-            : (
-                getUserName()
-                    .charAt(0)
-                    .toUpperCase()
-            );
+            : getUserName()
+                .charAt(0)
+                .toUpperCase();
 
 
     const messageContent =
@@ -526,7 +576,6 @@ function showTyping() {
         "message ai";
 
     typing.innerHTML = `
-
         <div class="message-avatar">
             N
         </div>
@@ -538,15 +587,12 @@ function showTyping() {
             </div>
 
             <div class="typing">
-
                 <span></span>
                 <span></span>
                 <span></span>
-
             </div>
 
         </div>
-
     `;
 
     messages.appendChild(
@@ -588,28 +634,19 @@ async function sendToAI(message) {
         await fetch(
             `${API_URL}/api/chat`,
             {
-
                 method:
                     "POST",
 
                 headers: {
-
                     "Content-Type":
                         "application/json"
-
                 },
 
                 body:
                     JSON.stringify({
-
-                        message:
-                            message,
-
-                        userId:
-                            userId
-
+                        message,
+                        userId
                     })
-
             }
         );
 
@@ -633,10 +670,8 @@ async function sendToAI(message) {
     if (!response.ok) {
 
         throw new Error(
-
             data?.error ||
             "Não foi possível conversar com a Nazuna."
-
         );
 
     }
@@ -673,12 +708,10 @@ function displayAIResponse(data) {
 
                 }
 
-
                 const text =
                     typeof item.resp === "string"
                         ? item.resp.trim()
                         : "";
-
 
                 if (!text) {
 
@@ -686,19 +719,16 @@ function displayAIResponse(data) {
 
                 }
 
-
                 const react =
                     typeof item.react === "string"
                         ? item.react
                         : "";
-
 
                 addMessage(
                     text,
                     "ai",
                     react
                 );
-
 
                 displayed =
                     true;
@@ -785,14 +815,6 @@ async function sendMessage(message) {
     showTyping();
 
 
-    await new Promise(
-        resolve =>
-            requestAnimationFrame(
-                resolve
-            )
-    );
-
-
     try {
 
         const data =
@@ -802,7 +824,6 @@ async function sendMessage(message) {
 
 
         removeTyping();
-
 
         displayAIResponse(
             data
@@ -831,11 +852,8 @@ async function sendMessage(message) {
 
 
         addMessage(
-
-            "Não consegui falar com meu cérebro agora 😭~ Tenta novamente daqui a pouco.",
-
+            "Não consegui falar com meu cérebro agora. Tenta novamente daqui a pouco.",
             "ai"
-
         );
 
     } finally {
@@ -851,107 +869,6 @@ async function sendMessage(message) {
     }
 
 }
-
-
-// =========================
-// FORMULÁRIO
-// =========================
-
-chatForm.addEventListener(
-    "submit",
-    event => {
-
-        event.preventDefault();
-
-        if (isLoading) {
-
-            return;
-
-        }
-
-        sendMessage(
-            messageInput.value
-        );
-
-    }
-);
-
-
-// =========================
-// ENTER
-// =========================
-
-messageInput.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key === "Enter" &&
-            !event.shiftKey
-        ) {
-
-            event.preventDefault();
-
-            if (!isLoading) {
-
-                chatForm.requestSubmit();
-
-            }
-
-        }
-
-    }
-);
-
-
-// =========================
-// INPUT
-// =========================
-
-messageInput.addEventListener(
-    "input",
-    autoResizeInput
-);
-
-
-// =========================
-// SUGESTÕES
-// =========================
-
-suggestions.forEach(
-    button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                if (isLoading) {
-
-                    return;
-
-                }
-
-
-                const message =
-                    button.dataset.message;
-
-
-                if (
-                    message &&
-                    message.trim()
-                ) {
-
-                    sendMessage(
-                        message
-                    );
-
-                }
-
-            }
-        );
-
-    }
-);
 
 
 // =========================
@@ -988,6 +905,93 @@ function newConversation() {
 }
 
 
+// =========================
+// FORMULÁRIO
+// =========================
+
+chatForm.addEventListener(
+    "submit",
+    event => {
+
+        event.preventDefault();
+
+        sendMessage(
+            messageInput.value
+        );
+
+    }
+);
+
+
+// =========================
+// ENTER
+// =========================
+
+messageInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            chatForm.requestSubmit();
+
+        }
+
+    }
+);
+
+
+// =========================
+// INPUT
+// =========================
+
+messageInput.addEventListener(
+    "input",
+    autoResizeInput
+);
+
+
+// =========================
+// SUGESTÕES
+// =========================
+
+suggestions.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const message =
+                    button.dataset.message;
+
+                if (
+                    message &&
+                    message.trim()
+                ) {
+
+                    sendMessage(
+                        message
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+// =========================
+// BOTÕES
+// =========================
+
 newChatButton.addEventListener(
     "click",
     newConversation
@@ -998,6 +1002,22 @@ clearChatButton.addEventListener(
     "click",
     newConversation
 );
+
+
+if (settingsButton) {
+
+    settingsButton.addEventListener(
+        "click",
+        () => {
+
+            console.log(
+                "⚙ Configurações ainda não implementadas."
+            );
+
+        }
+    );
+
+}
 
 
 // =========================
@@ -1082,12 +1102,10 @@ historyList.addEventListener(
 // INICIALIZAÇÃO
 // =========================
 
+updateUserUI();
+
 autoResizeInput();
 
-
-// =========================
-// NOME
-// =========================
 
 if (!userName) {
 
