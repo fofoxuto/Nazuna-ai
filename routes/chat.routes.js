@@ -20,7 +20,7 @@ const router =
 // =========================
 
 router.post(
-    "/chat",
+    "/",
     chatController
 );
 
