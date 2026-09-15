@@ -19,8 +19,21 @@ function parseNazunaResponse(text) {
     const cleaned =
         cleanGeminiResponse(text);
 
-    const parsed =
+    let parsed =
         extractJson(cleaned);
+
+    // =========================
+    // TENTAR JSON DUPLAMENTE
+    // =========================
+
+    if (
+        typeof parsed === "string"
+    ) {
+
+        parsed =
+            extractJson(parsed);
+
+    }
 
     // =========================
     // JSON VÁLIDO
@@ -115,4 +128,3 @@ function parseNazunaResponse(text) {
 module.exports = {
     parseNazunaResponse
 };
-
