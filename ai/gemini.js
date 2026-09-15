@@ -2,18 +2,22 @@
 // GEMINI AI
 // =========================
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY =
+    process.env.GEMINI_API_KEY;
+
 const GEMINI_MODEL =
-    process.env.GEMINI_MODEL || "gemini-3.6-flash";
+    process.env.GEMINI_MODEL ||
+    "gemini-3.6-flash";
+
 
 // =========================
 // GERAR RESPOSTA
 // =========================
 
-async function generateGeminiResponse({
-    systemInstruction,
-    message
-}) {
+async function generateResponse(
+    message,
+    systemInstruction
+) {
 
     if (!GEMINI_API_KEY) {
 
@@ -23,8 +27,10 @@ async function generateGeminiResponse({
 
     }
 
+
     const url =
         `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+
 
     // =========================
     // REQUEST
@@ -35,7 +41,8 @@ async function generateGeminiResponse({
             url,
             {
 
-                method: "POST",
+                method:
+                    "POST",
 
                 headers: {
 
@@ -47,7 +54,7 @@ async function generateGeminiResponse({
 
                 },
 
-                :
+                body:
                     JSON.stringify({
 
                         systemInstruction: {
@@ -69,7 +76,8 @@ async function generateGeminiResponse({
 
                             {
 
-                                role: "user",
+                                role:
+                                    "user",
 
                                 parts: [
 
@@ -88,9 +96,11 @@ async function generateGeminiResponse({
 
                         generationConfig: {
 
-                            temperature: 0.9,
+                            temperature:
+                                0.9,
 
-                            maxOutputTokens: 2048,
+                            maxOutputTokens:
+                                2048,
 
                             responseMimeType:
                                 "application/json"
@@ -101,6 +111,7 @@ async function generateGeminiResponse({
 
             }
         );
+
 
     // =========================
     // ERRO DA API
@@ -125,12 +136,14 @@ async function generateGeminiResponse({
 
     }
 
+
     // =========================
     // JSON
     // =========================
 
     const data =
         await response.json();
+
 
     // =========================
     // EXTRAIR TEXTO
@@ -146,6 +159,7 @@ async function generateGeminiResponse({
             )
             .join("")
             .trim();
+
 
     if (!rawReply) {
 
@@ -167,16 +181,17 @@ async function generateGeminiResponse({
 
     }
 
+
     return rawReply;
 
 }
+
 
 // =========================
 // EXPORT
 // =========================
 
 module.exports = {
-    generateGeminiResponse,
+    generateResponse,
     GEMINI_MODEL
 };
-
