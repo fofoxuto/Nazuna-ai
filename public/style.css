@@ -1,53 +1,41 @@
 /* =========================
-   NAZUNA DESIGN SYSTEM
-   ========================= */
+   DESIGN SYSTEM
+========================= */
 
 :root {
-    /* SURFACES */
+
     --bg: #09090b;
     --surface: #101014;
     --surface-2: #151519;
     --surface-3: #1b1b20;
-    --surface-glass: rgba(255, 255, 255, 0.035);
 
-    /* BORDERS */
     --border: rgba(255, 255, 255, 0.075);
     --border-soft: rgba(255, 255, 255, 0.045);
     --border-hover: rgba(255, 255, 255, 0.13);
 
-    /* TEXT */
     --text: #f4f4f5;
     --text-soft: #d8d8dd;
     --muted: #92929a;
     --muted-2: #686870;
 
-    /* NAZUNA ACCENT */
     --accent: #b8a0ff;
     --accent-strong: #9d7cff;
-    --accent-soft: rgba(184, 160, 255, 0.10);
-    --accent-border: rgba(184, 160, 255, 0.22);
 
-    /* MESSAGE SURFACES */
-    --user-message: #242127;
-    --ai-message: rgba(255, 255, 255, 0.055);
-    --ai-message-hover: rgba(255, 255, 255, 0.07);
+    --sidebar-width: 270px;
+    --content-width: 760px;
 
-    /* GEOMETRY */
     --radius-sm: 9px;
     --radius-md: 13px;
     --radius-lg: 17px;
     --radius-xl: 21px;
     --radius-pill: 999px;
 
-    /* LAYOUT */
-    --sidebar-width: 270px;
-    --content-width: 760px;
 }
 
 
 /* =========================
    RESET
-   ========================= */
+========================= */
 
 * {
     box-sizing: border-box;
@@ -56,34 +44,49 @@
 }
 
 html,
- {
+body {
     width: 100%;
     height: 100%;
 }
 
- {
+body {
     font-family: "Inter", sans-serif;
-    background: var(--bg);
+
+    background:
+        radial-gradient(
+            circle at 50% -20%,
+            rgba(157, 124, 255, 0.07),
+            transparent 35%
+        ),
+        var(--bg);
+
     color: var(--text);
+
     overflow: hidden;
+}
+
+button,
+textarea,
+input {
+    font-family: inherit;
 }
 
 
 /* =========================
    APP
-   ========================= */
+========================= */
 
 .app {
     display: flex;
 
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
 }
 
 
 /* =========================
    SIDEBAR
-   ========================= */
+========================= */
 
 .sidebar {
     width: var(--sidebar-width);
@@ -94,6 +97,8 @@ html,
     display: flex;
     flex-direction: column;
 
+    padding: 18px 14px;
+
     background:
         linear-gradient(
             180deg,
@@ -102,9 +107,8 @@ html,
         ),
         #0c0c0f;
 
-    border-right: 1px solid var(--border-soft);
-
-    padding: 18px 14px;
+    border-right:
+        1px solid var(--border-soft);
 }
 
 .sidebar-top {
@@ -116,7 +120,7 @@ html,
 
 /* =========================
    BRAND
-   ========================= */
+========================= */
 
 .brand {
     display: flex;
@@ -134,6 +138,8 @@ html,
     align-items: center;
     justify-content: center;
 
+    flex-shrink: 0;
+
     border-radius: var(--radius-md);
 
     background:
@@ -148,7 +154,8 @@ html,
     font-weight: 800;
 
     box-shadow:
-        0 0 28px rgba(157, 124, 255, 0.16);
+        0 0 28px
+        rgba(157, 124, 255, 0.16);
 }
 
 .brand h1 {
@@ -170,7 +177,7 @@ html,
 
 /* =========================
    NEW CHAT
-   ========================= */
+========================= */
 
 .new-chat {
     width: 100%;
@@ -182,7 +189,9 @@ html,
 
     padding: 0 13px;
 
-    border: 1px solid var(--border);
+    border:
+        1px solid var(--border);
+
     border-radius: var(--radius-md);
 
     background:
@@ -194,7 +203,6 @@ html,
 
     color: var(--text);
 
-    font-family: inherit;
     font-size: 13px;
     font-weight: 500;
 
@@ -223,7 +231,7 @@ html,
 
 /* =========================
    HISTORY
-   ========================= */
+========================= */
 
 .history {
     flex: 1;
@@ -266,7 +274,6 @@ html,
     background: transparent;
     color: #a5a5ad;
 
-    font-family: inherit;
     font-size: 12px;
 
     text-align: left;
@@ -276,37 +283,20 @@ html,
     transition:
         background 0.2s ease,
         border-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.18s ease;
+        color 0.2s ease;
 }
 
-.history-item:hover {
+.history-item:hover,
+.history-item.active {
     background: var(--surface-2);
     border-color: var(--border-soft);
-    color: var(--text);
-}
-
-.history-item:active {
-    transform: scale(0.98);
-}
-
-.history-item.active {
-    background:
-        linear-gradient(
-            90deg,
-            rgba(184, 160, 255, 0.08),
-            rgba(184, 160, 255, 0.025)
-        );
-
-    border-color: rgba(184, 160, 255, 0.10);
-
     color: var(--text);
 }
 
 
 /* =========================
    SIDEBAR BOTTOM
-   ========================= */
+========================= */
 
 .sidebar-bottom {
     display: flex;
@@ -329,15 +319,15 @@ html,
     background: transparent;
     color: #92929a;
 
-    font-family: inherit;
     font-size: 12px;
+
+    text-align: left;
 
     cursor: pointer;
 
     transition:
         background 0.2s ease,
-        color 0.2s ease,
-        transform 0.18s ease;
+        color 0.2s ease;
 }
 
 .sidebar-button:hover {
@@ -345,14 +335,10 @@ html,
     color: var(--text);
 }
 
-.sidebar-button:active {
-    transform: scale(0.98);
-}
-
 
 /* =========================
-   USER
-   ========================= */
+   USER CARD
+========================= */
 
 .user-card {
     display: flex;
@@ -360,10 +346,10 @@ html,
     gap: 9px;
 
     margin-top: 3px;
-
     padding: 11px 10px 4px;
 
-    border-top: 1px solid var(--border-soft);
+    border-top:
+        1px solid var(--border-soft);
 }
 
 .user-avatar {
@@ -373,6 +359,8 @@ html,
     display: flex;
     align-items: center;
     justify-content: center;
+
+    flex-shrink: 0;
 
     border-radius: 10px;
 
@@ -386,12 +374,18 @@ html,
 
 .user-info {
     flex: 1;
+    min-width: 0;
 }
 
 .user-info strong {
     display: block;
 
+    overflow: hidden;
+
     font-size: 11px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .user-info span {
@@ -412,7 +406,7 @@ html,
 
 /* =========================
    MAIN
-   ========================= */
+========================= */
 
 .main {
     position: relative;
@@ -427,24 +421,27 @@ html,
 
 /* =========================
    TOPBAR
-   ========================= */
+========================= */
 
 .topbar {
     height: 58px;
+
     flex-shrink: 0;
+
+    position: relative;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    position: relative;
-
-    border-bottom: 1px solid var(--border-soft);
+    border-bottom:
+        1px solid var(--border-soft);
 
     background:
         rgba(9, 9, 11, 0.82);
 
     backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 }
 
 .model {
@@ -467,7 +464,8 @@ html,
     background: #8ee6a5;
 
     box-shadow:
-        0 0 10px rgba(142, 230, 165, 0.45);
+        0 0 10px
+        rgba(142, 230, 165, 0.45);
 }
 
 .clear-button {
@@ -476,32 +474,28 @@ html,
 
     padding: 7px 10px;
 
-    border: 1px solid var(--border);
+    border:
+        1px solid var(--border);
+
     border-radius: var(--radius-sm);
 
-    background: rgba(255, 255, 255, 0.015);
+    background:
+        rgba(255, 255, 255, 0.015);
+
     color: #777780;
 
-    font-family: inherit;
     font-size: 10px;
 
     cursor: pointer;
 
     transition:
         background 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.18s ease;
+        color 0.2s ease;
 }
 
 .clear-button:hover {
     color: var(--text);
     background: var(--surface-2);
-    border-color: var(--border-hover);
-}
-
-.clear-button:active {
-    transform: scale(0.96);
 }
 
 .menu-button,
@@ -512,7 +506,7 @@ html,
 
 /* =========================
    CHAT
-   ========================= */
+========================= */
 
 .chat {
     flex: 1;
@@ -538,7 +532,7 @@ html,
 
 /* =========================
    WELCOME
-   ========================= */
+========================= */
 
 .welcome {
     width: min(680px, 90%);
@@ -575,7 +569,8 @@ html,
     font-weight: 800;
 
     box-shadow:
-        0 0 45px rgba(157, 124, 255, 0.16);
+        0 0 45px
+        rgba(157, 124, 255, 0.16);
 }
 
 .welcome h2 {
@@ -597,7 +592,7 @@ html,
 
 /* =========================
    SUGGESTIONS
-   ========================= */
+========================= */
 
 .suggestions {
     display: grid;
@@ -617,7 +612,9 @@ html,
 
     padding: 13px;
 
-    border: 1px solid var(--border);
+    border:
+        1px solid var(--border);
+
     border-radius: var(--radius-md);
 
     background:
@@ -629,7 +626,6 @@ html,
 
     color: #aaaab2;
 
-    font-family: inherit;
     font-size: 11px;
 
     text-align: left;
@@ -655,14 +651,15 @@ html,
 
     border-radius: 9px;
 
-    background: rgba(255, 255, 255, 0.045);
+    background:
+        rgba(255, 255, 255, 0.045);
 
     font-size: 16px;
 }
 
 .suggestion:hover {
     background: var(--surface-2);
-    border-color: var(--accent-border);
+    border-color: rgba(184, 160, 255, 0.22);
     color: var(--text);
 
     transform: translateY(-2px);
@@ -675,7 +672,7 @@ html,
 
 /* =========================
    MESSAGES
-   ========================= */
+========================= */
 
 .messages {
     width: min(var(--content-width), 92%);
@@ -691,7 +688,8 @@ html,
 
     margin-bottom: 27px;
 
-    animation: messageIn 0.25s ease;
+    animation:
+        messageIn 0.25s ease;
 }
 
 @keyframes messageIn {
@@ -711,7 +709,7 @@ html,
 
 /* =========================
    AVATARS
-   ========================= */
+========================= */
 
 .message-avatar {
     width: 30px;
@@ -740,7 +738,8 @@ html,
     color: #191322;
 
     box-shadow:
-        0 0 18px rgba(157, 124, 255, 0.10);
+        0 0 18px
+        rgba(157, 124, 255, 0.10);
 }
 
 .message.user .message-avatar {
@@ -751,11 +750,10 @@ html,
 
 /* =========================
    MESSAGE CONTENT
-   ========================= */
+========================= */
 
 .message-content {
     flex: 1;
-
     min-width: 0;
 }
 
@@ -766,14 +764,12 @@ html,
 
     font-size: 10px;
     font-weight: 600;
-
-    letter-spacing: 0.01em;
 }
 
 
 /* =========================
    AI MESSAGE
-   ========================= */
+========================= */
 
 .message.ai .message-text {
     display: inline-block;
@@ -782,16 +778,14 @@ html,
 
     padding: 12px 15px;
 
-    border: 1px solid var(--border-soft);
+    border:
+        1px solid var(--border-soft);
 
-    border-radius: 6px 16px 16px 16px;
+    border-radius:
+        6px 16px 16px 16px;
 
     background:
-        linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.060),
-            rgba(255, 255, 255, 0.038)
-        );
+        rgba(255, 255, 255, 0.055);
 
     color: var(--text-soft);
 
@@ -799,22 +793,18 @@ html,
     line-height: 1.7;
 
     white-space: pre-wrap;
-    word-break: break-word;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
+    overflow-wrap: anywhere;
 }
 
 .message.ai .message-text:hover {
-    background: var(--ai-message-hover);
-    border-color: rgba(255, 255, 255, 0.09);
+    background:
+        rgba(255, 255, 255, 0.07);
 }
 
 
 /* =========================
    USER MESSAGE
-   ========================= */
+========================= */
 
 .message.user .message-text {
     display: inline-block;
@@ -823,9 +813,11 @@ html,
 
     padding: 11px 14px;
 
-    border: 1px solid rgba(255, 255, 255, 0.045);
+    border:
+        1px solid rgba(255, 255, 255, 0.045);
 
-    border-radius: 16px 6px 16px 16px;
+    border-radius:
+        16px 6px 16px 16px;
 
     background:
         linear-gradient(
@@ -840,13 +832,13 @@ html,
     line-height: 1.65;
 
     white-space: pre-wrap;
-    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
 
 /* =========================
    REACTION
-   ========================= */
+========================= */
 
 .message-reaction {
     display: inline-flex;
@@ -861,28 +853,35 @@ html,
 
     padding: 3px 7px;
 
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border:
+        1px solid rgba(255, 255, 255, 0.08);
 
-    border-radius: var(--radius-pill);
+    border-radius:
+        var(--radius-pill);
 
     background:
         rgba(255, 255, 255, 0.045);
 
     font-size: 16px;
 
-    animation: reactionAppear 0.25s ease-out;
+    animation:
+        reactionAppear 0.25s ease-out;
 }
 
 @keyframes reactionAppear {
 
     from {
         opacity: 0;
-        transform: scale(0.7) translateY(4px);
+        transform:
+            scale(0.7)
+            translateY(4px);
     }
 
     to {
         opacity: 1;
-        transform: scale(1) translateY(0);
+        transform:
+            scale(1)
+            translateY(0);
     }
 
 }
@@ -890,7 +889,7 @@ html,
 
 /* =========================
    TYPING
-   ========================= */
+========================= */
 
 .typing {
     display: flex;
@@ -899,16 +898,18 @@ html,
 
     width: fit-content;
 
+    height: 40px;
+
     padding: 11px 14px;
 
-    border: 1px solid var(--border-soft);
+    border:
+        1px solid var(--border-soft);
 
-    border-radius: 6px 15px 15px 15px;
+    border-radius:
+        6px 15px 15px 15px;
 
     background:
         rgba(255, 255, 255, 0.045);
-
-    height: 40px;
 }
 
 .typing span {
@@ -949,8 +950,8 @@ html,
 
 
 /* =========================
-   INPUT AREA
-   ========================= */
+   INPUT
+========================= */
 
 .input-area {
     width: min(var(--content-width), 92%);
@@ -967,9 +968,11 @@ html,
 
     padding: 8px 8px 8px 14px;
 
-    border: 1px solid rgba(255, 255, 255, 0.075);
+    border:
+        1px solid rgba(255, 255, 255, 0.075);
 
-    border-radius: var(--radius-lg);
+    border-radius:
+        var(--radius-lg);
 
     background:
         linear-gradient(
@@ -979,49 +982,24 @@ html,
         );
 
     box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.18);
+        0 10px 35px
+        rgba(0, 0, 0, 0.18);
 
     transition:
-        background 0.2s ease,
         border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
+        box-shadow 0.2s ease;
 }
-
-
-/* INPUT HOVER */
-
-.input-box:hover {
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.055),
-            rgba(255, 255, 255, 0.032)
-        );
-
-    border-color: rgba(255, 255, 255, 0.12);
-}
-
-
-/* INPUT FOCUS */
 
 .input-box:focus-within {
-    border-color: rgba(184, 160, 255, 0.35);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.06),
-            rgba(255, 255, 255, 0.035)
-        );
+    border-color:
+        rgba(184, 160, 255, 0.35);
 
     box-shadow:
-        0 0 0 3px rgba(184, 160, 255, 0.045),
-        0 12px 40px rgba(0, 0, 0, 0.22);
+        0 0 0 3px
+        rgba(184, 160, 255, 0.045),
+        0 12px 40px
+        rgba(0, 0, 0, 0.22);
 }
-
-
-/* TEXTAREA */
 
 textarea {
     flex: 1;
@@ -1037,26 +1015,18 @@ textarea {
     background: transparent;
     color: var(--text);
 
-    font-family: inherit;
     font-size: 13px;
     line-height: 1.5;
 }
 
 textarea::placeholder {
     color: #64646c;
-
-    transition:
-        color 0.2s ease;
-}
-
-.input-box:focus-within textarea::placeholder {
-    color: #777780;
 }
 
 
 /* =========================
-   SEND BUTTON
-   ========================= */
+   SEND
+========================= */
 
 .send-button {
     width: 32px;
@@ -1075,23 +1045,17 @@ textarea::placeholder {
     color: #111;
 
     font-size: 19px;
-    font-weight: 500;
 
     cursor: pointer;
 
     transition:
         transform 0.18s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
+        background 0.2s ease;
 }
 
 .send-button:hover {
     transform: scale(1.05);
-
     background: white;
-
-    box-shadow:
-        0 0 18px rgba(255, 255, 255, 0.10);
 }
 
 .send-button:active {
@@ -1100,18 +1064,14 @@ textarea::placeholder {
 
 .send-button:disabled {
     opacity: 0.35;
-
     cursor: default;
-
     transform: none;
-
-    box-shadow: none;
 }
 
 
 /* =========================
    DISCLAIMER
-   ========================= */
+========================= */
 
 .disclaimer {
     margin-top: 8px;
@@ -1125,30 +1085,235 @@ textarea::placeholder {
 
 
 /* =========================
+   NAME MODAL
+========================= */
+
+.name-modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background:
+        rgba(0, 0, 0, 0.62);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    opacity: 0;
+
+    transition:
+        opacity 0.18s ease;
+}
+
+.name-modal-overlay.visible {
+    opacity: 1;
+}
+
+.name-modal-overlay.closing {
+    opacity: 0;
+}
+
+.name-modal {
+    width: min(390px, 100%);
+
+    padding: 28px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.09);
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #151519,
+            #101014
+        );
+
+    box-shadow:
+        0 30px 90px
+        rgba(0, 0, 0, 0.55);
+
+    text-align: center;
+
+    transform:
+        translateY(10px)
+        scale(0.97);
+
+    transition:
+        transform 0.18s ease;
+}
+
+.name-modal-overlay.visible .name-modal {
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+.name-modal-icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #d7c9ff,
+            #8f68ff
+        );
+
+    color: #17121f;
+
+    font-size: 20px;
+    font-weight: 800;
+
+    box-shadow:
+        0 0 35px
+        rgba(157, 124, 255, 0.18);
+}
+
+.name-modal h2 {
+    font-size: 19px;
+
+    letter-spacing: -0.03em;
+}
+
+.name-modal p {
+    margin-top: 8px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.name-modal input {
+    width: 100%;
+
+    height: 44px;
+
+    margin-top: 20px;
+
+    padding: 0 13px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 11px;
+
+    outline: none;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    color: var(--text);
+
+    font-size: 13px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.name-modal input:focus {
+    border-color:
+        rgba(184, 160, 255, 0.4);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(184, 160, 255, 0.06);
+}
+
+.name-modal input.invalid {
+    border-color:
+        rgba(255, 100, 130, 0.55);
+}
+
+.name-modal input::placeholder {
+    color: #64646c;
+}
+
+.name-modal button {
+    width: 100%;
+    height: 44px;
+
+    margin-top: 10px;
+
+    border: 0;
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #d7c9ff,
+            #9573ff
+        );
+
+    color: #17121f;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        filter 0.2s ease;
+}
+
+.name-modal button:hover {
+    filter: brightness(1.08);
+}
+
+.name-modal button:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================
    MOBILE
-   ========================= */
+========================= */
 
 @media (max-width: 700px) {
 
     .sidebar {
         position: fixed;
 
-        left: 0;
-        top: 0;
+        inset:
+            0 auto 0 0;
 
         z-index: 100;
 
-        transform: translateX(-100%);
+        transform:
+            translateX(-100%);
 
         transition:
             transform 0.25s ease;
 
         box-shadow:
-            15px 0 50px rgba(0, 0, 0, 0.4);
+            15px 0 50px
+            rgba(0, 0, 0, 0.4);
     }
 
     .sidebar.open {
-        transform: translateX(0);
+        transform:
+            translateX(0);
     }
 
     .main {
@@ -1171,7 +1336,7 @@ textarea::placeholder {
         width: 32px;
         height: 32px;
 
-        border: 1px solid transparent;
+        border: 0;
         border-radius: 9px;
 
         background: transparent;
@@ -1180,14 +1345,6 @@ textarea::placeholder {
         font-size: 17px;
 
         cursor: pointer;
-
-        transition:
-            background 0.2s ease,
-            transform 0.18s ease;
-    }
-
-    .menu-button:hover {
-        background: var(--surface-2);
     }
 
     .menu-button:active {
@@ -1217,7 +1374,6 @@ textarea::placeholder {
 
     .clear-button {
         right: 12px;
-
         font-size: 9px;
     }
 
@@ -1239,7 +1395,6 @@ textarea::placeholder {
 
     .messages {
         width: 92%;
-
         padding-top: 18px;
     }
 
@@ -1263,18 +1418,19 @@ textarea::placeholder {
     .message.ai .message-text {
         padding: 11px 13px;
 
-        border-radius: 5px 14px 14px 14px;
+        border-radius:
+            5px 14px 14px 14px;
     }
 
     .message.user .message-text {
         padding: 10px 13px;
 
-        border-radius: 14px 5px 14px 14px;
+        border-radius:
+            14px 5px 14px 14px;
     }
 
     .input-area {
         width: 92%;
-
         padding-bottom: 12px;
     }
 
@@ -1286,467 +1442,27 @@ textarea::placeholder {
         min-width: 30px;
         height: 30px;
     }
-    
-    /* =========================
-   MODAL DE NOME
-========================= */
-
-.name-modal-overlay {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 9999;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 24px;
-
-    background:
-        rgba(0, 0, 0, 0.58);
-
-    backdrop-filter:
-        blur(12px);
-
-    -webkit-backdrop-filter:
-        blur(12px);
-
-    opacity: 0;
-
-    transition:
-        opacity 0.18s ease;
-
-}
-
-
-/* =========================
-   MODAL VISÍVEL
-========================= */
-
-.name-modal-overlay.visible {
-
-    opacity: 1;
-
-}
-
-
-/* =========================
-   MODAL
-========================= */
-
-.name-modal {
-
-    width: min(
-        100%,
-        400px
-    );
-
-    padding: 28px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,0.075),
-            rgba(255,255,255,0.035)
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,0.10);
-
-    border-radius:
-        21px;
-
-    box-shadow:
-        0 24px 80px
-        rgba(0,0,0,0.45);
-
-    backdrop-filter:
-        blur(24px);
-
-    -webkit-backdrop-filter:
-        blur(24px);
-
-    transform:
-        translateY(12px)
-        scale(0.97);
-
-    transition:
-        transform 0.22s ease;
-
-}
-
-
-/* =========================
-   ANIMAÇÃO DE ENTRADA
-========================= */
-
-.name-modal-overlay.visible
-.name-modal {
-
-    transform:
-        translateY(0)
-        scale(1);
-
-}
-
-
-/* =========================
-   TÍTULO
-========================= */
-
-.name-modal h2 {
-
-    margin: 0;
-
-    color:
-        var(--text);
-
-    font-size:
-        21px;
-
-    font-weight:
-        600;
-
-    letter-spacing:
-        -0.025em;
-
-}
-
-
-/* =========================
-   DESCRIÇÃO
-========================= */
-
-.name-modal p {
-
-    margin:
-        9px 0 20px;
-
-    color:
-        var(--muted);
-
-    font-size:
-        14px;
-
-    line-height:
-        1.55;
-
-}
-
-
-/* =========================
-   INPUT
-========================= */
-
-.name-modal input {
-
-    width: 100%;
-
-    height: 50px;
-
-    box-sizing: border-box;
-
-    padding:
-        0 15px;
-
-    border:
-        1px solid
-        var(--border);
-
-    border-radius:
-        13px;
-
-    outline: none;
-
-    background:
-        rgba(255,255,255,0.045);
-
-    color:
-        var(--text);
-
-    font-family:
-        inherit;
-
-    font-size:
-        14px;
-
-    transition:
-        background 0.18s ease,
-        border-color 0.18s ease,
-        box-shadow 0.18s ease,
-        transform 0.18s ease;
-
-}
-
-
-/* =========================
-   PLACEHOLDER
-========================= */
-
-.name-modal input::placeholder {
-
-    color:
-        var(--muted-2);
-
-}
-
-
-/* =========================
-   INPUT HOVER
-========================= */
-
-.name-modal input:hover {
-
-    background:
-        rgba(255,255,255,0.06);
-
-    border-color:
-        var(--border-hover);
-
-}
-
-
-/* =========================
-   INPUT FOCUS
-========================= */
-
-.name-modal input:focus {
-
-    background:
-        rgba(255,255,255,0.065);
-
-    border-color:
-        var(--accent-border);
-
-    box-shadow:
-        0 0 0 3px
-        var(--accent-soft);
-
-}
-
-
-/* =========================
-   INPUT INVÁLIDO
-========================= */
-
-.name-modal input.invalid {
-
-    border-color:
-        rgba(255, 110, 140, 0.45);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(255, 110, 140, 0.08);
-
-    animation:
-        nameInputShake
-        0.22s ease;
-
-}
-
-
-/* =========================
-   BOTÃO
-========================= */
-
-.name-modal button {
-
-    width: 100%;
-
-    height: 48px;
-
-    margin-top:
-        12px;
-
-    border:
-        1px solid
-        var(--accent-border);
-
-    border-radius:
-        13px;
-
-    outline: none;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(184,160,255,0.18),
-            rgba(157,124,255,0.10)
-        );
-
-    color:
-        var(--text);
-
-    font-family:
-        inherit;
-
-    font-size:
-        14px;
-
-    font-weight:
-        600;
-
-    cursor:
-        pointer;
-
-    transition:
-        transform 0.16s ease,
-        background 0.18s ease,
-        border-color 0.18s ease,
-        box-shadow 0.18s ease;
-
-}
-
-
-/* =========================
-   BOTÃO HOVER
-========================= */
-
-.name-modal button:hover {
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(184,160,255,0.24),
-            rgba(157,124,255,0.14)
-        );
-
-    border-color:
-        rgba(184,160,255,0.32);
-
-    box-shadow:
-        0 8px 28px
-        rgba(157,124,255,0.10);
-
-    transform:
-        translateY(-1px);
-
-}
-
-
-/* =========================
-   BOTÃO ACTIVE
-========================= */
-
-.name-modal button:active {
-
-    transform:
-        scale(0.96);
-
-}
-
-
-/* =========================
-   FECHAMENTO
-========================= */
-
-.name-modal-overlay.closing {
-
-    opacity: 0;
-
-}
-
-.name-modal-overlay.closing
-.name-modal {
-
-    transform:
-        translateY(8px)
-        scale(0.97);
-
-}
-
-
-/* =========================
-   ANIMAÇÃO DE ERRO
-========================= */
-
-@keyframes nameInputShake {
-
-    0% {
-        transform:
-            translateX(0);
-    }
-
-    25% {
-        transform:
-            translateX(-4px);
-    }
-
-    50% {
-        transform:
-            translateX(4px);
-    }
-
-    75% {
-        transform:
-            translateX(-3px);
-    }
-
-    100% {
-        transform:
-            translateX(0);
-    }
-
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 600px) {
-
-    .name-modal-overlay {
-
-        padding:
-            18px;
-
-        align-items:
-            flex-end;
-
-    }
-
 
     .name-modal {
-
-        width: 100%;
-
-        padding:
-            24px;
-
-        border-radius:
-            21px;
-
-        transform:
-            translateY(20px)
-            scale(0.98);
-
-    }
-
-
-    .name-modal-overlay.visible
-    .name-modal {
-
-        transform:
-            translateY(0)
-            scale(1);
-
-    }
-
-
-    .name-modal h2 {
-
-        font-size:
-            20px;
-
+        padding: 24px 20px;
     }
 
 }
+
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 
 }
