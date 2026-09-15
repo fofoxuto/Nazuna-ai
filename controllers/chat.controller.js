@@ -1,5 +1,5 @@
 const { generateResponse } = require("../ai/gemini");
-const { parseNazunaResponse } = require("../utils/parser");
+const { parseNazunaResponse } = require("../parsers/nazuna.parser");
 const {
     applyLearning,
     buildMemoryContext
