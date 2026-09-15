@@ -1,740 +1,1202 @@
-const sidebar = document.getElementById("sidebar");
-const menuButton = document.getElementById("menuButton");
+// =========================
+// ELEMENTOS
+// =========================
 
-const chat = document.getElementById("chat");
-const welcome = document.getElementById("welcome");
-const messages = document.getElementById("messages");
+const sidebar =
+    document.getElementById("sidebar");
 
-const chatForm = document.getElementById("chatForm");
-const messageInput = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
+const menuButton =
+    document.getElementById("menuButton");
 
-const newChatButton = document.getElementById("newChat");
-const clearChatButton = document.getElementById("clearChat");
+const chat =
+    document.getElementById("chat");
 
-const suggestions = document.querySelectorAll(".suggestion");
-const historyList = document.getElementById("historyList");
+const welcome =
+    document.getElementById("welcome");
+
+const messages =
+    document.getElementById("messages");
+
+const chatForm =
+    document.getElementById("chatForm");
+
+const messageInput =
+    document.getElementById("messageInput");
+
+const sendButton =
+    document.getElementById("sendButton");
+
+const newChatButton =
+    document.getElementById("newChat");
+
+const clearChatButton =
+    document.getElementById("clearChat");
+
+const suggestions =
+    document.querySelectorAll(".suggestion");
+
+const historyList =
+    document.getElementById("historyList");
+
+
+// =========================
+// ESTADO
+// =========================
 
 let isLoading = false;
 
-/* =========================
-UTILIDADES
-========================= */
 
-function scrollToBottom(smooth = true) {
+// =========================
+// NOME DO USUÁRIO
+// =========================
 
-requestAnimationFrame(() => {
+const USER_NAME_KEY =
+    "nazunaUserName";
 
-    chat.scrollTo({
-        top: chat.scrollHeight,
-        behavior: smooth ? "smooth" : "auto"
-    });
+let userName =
+    localStorage.getItem(
+        USER_NAME_KEY
+    );
 
-});
+
+// =========================
+// CONFIGURAR NOME
+// =========================
+
+function saveUserName(name) {
+
+    const cleanName =
+        name.trim();
+
+    if (!cleanName) {
+
+        return false;
+
+    }
+
+    userName =
+        cleanName;
+
+    localStorage.setItem(
+        USER_NAME_KEY,
+        userName
+    );
+
+    return true;
 
 }
+
+
+// =========================
+// MODAL DE NOME
+// =========================
+
+function showNameModal() {
+
+    // Se já existe nome,
+    // não precisa perguntar novamente.
+
+    if (userName) {
+
+        return;
+
+    }
+
+
+    // =========================
+    // OVERLAY
+    // =========================
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className =
+        "name-modal-overlay";
+
+
+    // =========================
+    // MODAL
+    // =========================
+
+    const modal =
+        document.createElement("div");
+
+    modal.className =
+        "name-modal";
+
+
+    // =========================
+    // TÍTULO
+    // =========================
+
+    const title =
+        document.createElement("h2");
+
+    title.textContent =
+        "Como posso te chamar? 💜";
+
+
+    // =========================
+    // DESCRIÇÃO
+    // =========================
+
+    const description =
+        document.createElement("p");
+
+    description.textContent =
+        "Só pra eu saber como chamar você por aqui.";
+
+
+    // =========================
+    // INPUT
+    // =========================
+
+    const input =
+        document.createElement("input");
+
+    input.type =
+        "text";
+
+    input.placeholder =
+        "Insira seu nome...";
+
+    input.maxLength =
+        40;
+
+    input.autocomplete =
+        "name";
+
+
+    // =========================
+    // BOTÃO
+    // =========================
+
+    const button =
+        document.createElement("button");
+
+    button.type =
+        "button";
+
+    button.textContent =
+        "Continuar";
+
+
+    // =========================
+    // FUNÇÃO CONFIRMAR
+    // =========================
+
+    function confirmName() {
+
+        const name =
+            input.value.trim();
+
+        if (!name) {
+
+            input.focus();
+
+            input.classList.add(
+                "invalid"
+            );
+
+            return;
+
+        }
+
+        if (
+            !saveUserName(name)
+        ) {
+
+            return;
+
+        }
+
+        overlay.classList.add(
+            "closing"
+        );
+
+        setTimeout(
+            () => {
+
+                overlay.remove();
+
+                messageInput.focus();
+
+            },
+            180
+        );
+
+    }
+
+
+    // =========================
+    // ENTER
+    // =========================
+
+    input.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+                confirmName();
+
+            }
+
+        }
+    );
+
+
+    // =========================
+    // REMOVER ERRO AO DIGITAR
+    // =========================
+
+    input.addEventListener(
+        "input",
+        () => {
+
+            input.classList.remove(
+                "invalid"
+            );
+
+        }
+    );
+
+
+    // =========================
+    // BOTÃO
+    // =========================
+
+    button.addEventListener(
+        "click",
+        confirmName
+    );
+
+
+    // =========================
+    // MONTAR
+    // =========================
+
+    modal.appendChild(
+        title
+    );
+
+    modal.appendChild(
+        description
+    );
+
+    modal.appendChild(
+        input
+    );
+
+    modal.appendChild(
+        button
+    );
+
+    overlay.appendChild(
+        modal
+    );
+
+    document.body.appendChild(
+        overlay
+    );
+
+
+    // =========================
+    // ANIMAÇÃO
+    // =========================
+
+    requestAnimationFrame(
+        () => {
+
+            overlay.classList.add(
+                "visible"
+            );
+
+            input.focus();
+
+        }
+    );
+
+}
+
+
+// =========================
+// PEGAR NOME
+// =========================
+
+function getUserName() {
+
+    return (
+        userName ||
+        "Você"
+    );
+
+}
+
+
+// =========================
+// UTILIDADES
+// =========================
+
+function scrollToBottom(
+    smooth = true
+) {
+
+    requestAnimationFrame(
+        () => {
+
+            chat.scrollTo({
+
+                top:
+                    chat.scrollHeight,
+
+                behavior:
+                    smooth
+                        ? "smooth"
+                        : "auto"
+
+            });
+
+        }
+    );
+
+}
+
 
 function autoResizeInput() {
 
-messageInput.style.height = "auto";
+    messageInput.style.height =
+        "auto";
 
-messageInput.style.height =
-    Math.min(messageInput.scrollHeight, 150) + "px";
+    messageInput.style.height =
+        Math.min(
+            messageInput.scrollHeight,
+            150
+        ) + "px";
 
 }
 
-/* =========================
-MENSAGENS
-========================= */
 
-function addMessage(content, type, react = "") {
+// =========================
+// ADICIONAR MENSAGEM
+// =========================
 
-welcome.style.display = "none";
-
-const message = document.createElement("div");
-
-message.className =
-    `message ${type}`;
-
-/* =========================
-AVATAR
-========================= */
-
-const avatar =
-    document.createElement("div");
-
-avatar.className =
-    "message-avatar";
-
-avatar.textContent =
-    type === "ai"
-        ? "N"
-        : "T";
-
-/* =========================
-CONTEÚDO
-========================= */
-
-const messageContent =
-    document.createElement("div");
-
-messageContent.className =
-    "message-content";
-
-/* =========================
-NOME
-========================= */
-
-const name =
-    document.createElement("div");
-
-name.className =
-    "message-name";
-
-name.textContent =
-    type === "ai"
-        ? "Nazuna"
-        : "Você";
-
-/* =========================
-TEXTO
-========================= */
-
-const text =
-    document.createElement("div");
-
-text.className =
-    "message-text";
-
-/*
-    Nunca coloque objetos diretamente
-    no textContent.
-
-    Isso evita:
-    [object Object]
-*/
-
-text.textContent =
-    typeof content === "string"
-        ? content
-        : String(content ?? "");
-
-messageContent.appendChild(name);
-messageContent.appendChild(text);
-
-/* =========================
-REAÇÃO
-========================= */
-
-if (
-    type === "ai" &&
-    typeof react === "string" &&
-    react.trim()
+function addMessage(
+    content,
+    type,
+    react = ""
 ) {
 
-    const reaction =
+    welcome.style.display =
+        "none";
+
+
+    const message =
         document.createElement("div");
 
-    reaction.className =
-        "message-reaction";
+    message.className =
+        `message ${type}`;
 
-    reaction.textContent =
-        react;
+
+    // =========================
+    // AVATAR
+    // =========================
+
+    const avatar =
+        document.createElement("div");
+
+    avatar.className =
+        "message-avatar";
+
+    avatar.textContent =
+        type === "ai"
+            ? "N"
+            : (
+                getUserName()
+                    .charAt(0)
+                    .toUpperCase()
+            );
+
+
+    // =========================
+    // CONTEÚDO
+    // =========================
+
+    const messageContent =
+        document.createElement("div");
+
+    messageContent.className =
+        "message-content";
+
+
+    // =========================
+    // NOME
+    // =========================
+
+    const name =
+        document.createElement("div");
+
+    name.className =
+        "message-name";
+
+    name.textContent =
+        type === "ai"
+            ? "Nazuna"
+            : getUserName();
+
+
+    // =========================
+    // TEXTO
+    // =========================
+
+    const text =
+        document.createElement("div");
+
+    text.className =
+        "message-text";
+
+    text.textContent =
+        typeof content === "string"
+            ? content
+            : String(
+                content ?? ""
+            );
+
 
     messageContent.appendChild(
-        reaction
+        name
     );
 
+    messageContent.appendChild(
+        text
+    );
+
+
+    // =========================
+    // REAÇÃO
+    // =========================
+
+    if (
+        type === "ai" &&
+        typeof react === "string" &&
+        react.trim()
+    ) {
+
+        const reaction =
+            document.createElement("div");
+
+        reaction.className =
+            "message-reaction";
+
+        reaction.textContent =
+            react;
+
+        messageContent.appendChild(
+            reaction
+        );
+
+    }
+
+
+    // =========================
+    // MONTAR
+    // =========================
+
+    message.appendChild(
+        avatar
+    );
+
+    message.appendChild(
+        messageContent
+    );
+
+    messages.appendChild(
+        message
+    );
+
+    scrollToBottom();
+
+    return message;
+
 }
 
-/* =========================
-MONTAR
-========================= */
 
-message.appendChild(avatar);
-
-message.appendChild(
-    messageContent
-);
-
-messages.appendChild(message);
-
-scrollToBottom();
-
-return message;
-
-}
-
-/* =========================
-TYPING
-========================= */
+// =========================
+// DIGITANDO
+// =========================
 
 function showTyping() {
 
-/*
-    Evita criar vários indicadores
-    ao mesmo tempo.
-*/
+    if (
+        document.getElementById(
+            "typingMessage"
+        )
+    ) {
 
-if (
-    document.getElementById(
-        "typingMessage"
-    )
-) {
+        return;
 
-    return;
+    }
+
+
+    const typing =
+        document.createElement("div");
+
+    typing.id =
+        "typingMessage";
+
+    typing.className =
+        "message ai";
+
+    typing.innerHTML = `
+
+        <div class="message-avatar">
+            N
+        </div>
+
+        <div class="message-content">
+
+            <div class="message-name">
+                Nazuna
+            </div>
+
+            <div class="typing">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </div>
+
+        </div>
+
+    `;
+
+    messages.appendChild(
+        typing
+    );
+
+    scrollToBottom(false);
 
 }
 
-const typing =
-    document.createElement("div");
 
-typing.id =
-    "typingMessage";
-
-typing.className =
-    "message ai";
-
-typing.innerHTML = `
-    <div class="message-avatar">
-        N
-    </div>
-
-    <div class="message-content">
-
-        <div class="message-name">
-            Nazuna
-        </div>
-
-        <div class="typing">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-
-    </div>
-`;
-
-messages.appendChild(typing);
-
-/*
-    Scroll instantâneo aqui.
-    Não espera animação.
-*/
-
-scrollToBottom(false);
-
-}
-
-/* =========================
-REMOVER TYPING
-========================= */
+// =========================
+// REMOVER DIGITANDO
+// =========================
 
 function removeTyping() {
 
-const typing =
-    document.getElementById(
-        "typingMessage"
-    );
+    const typing =
+        document.getElementById(
+            "typingMessage"
+        );
 
-if (typing) {
+    if (typing) {
 
-    typing.remove();
+        typing.remove();
+
+    }
 
 }
 
-}
 
-/* =========================
-API
-========================= */
+// =========================
+// COMUNICAR COM BACKEND
+// =========================
 
 async function sendToAI(message) {
 
-const response =
-    await fetch(
-        "/api/chat",
-        {
+    const response =
+        await fetch(
+            "/api/chat",
+            {
 
-            method: "POST",
+                method:
+                    "POST",
 
-            headers: {
-                "Content-Type":
-                    "application/json"
-            },
+                headers: {
 
-            body: JSON.stringify({
-                message
-            })
+                    "Content-Type":
+                        "application/json"
 
-        }
-    );
+                },
 
-/*
-    Lê o JSON somente uma vez.
-*/
+                body:
+                    JSON.stringify({
 
-let data;
+                        message:
+                            message
 
-try {
+                    })
 
-    data =
-        await response.json();
+            }
+        );
 
-} catch {
 
-    throw new Error(
-        "O servidor retornou uma resposta inválida."
-    );
+    // =========================
+    // LER RESPOSTA
+    // =========================
+
+    let data;
+
+    try {
+
+        data =
+            await response.json();
+
+    } catch {
+
+        throw new Error(
+            "O servidor retornou uma resposta inválida."
+        );
+
+    }
+
+
+    // =========================
+    // ERRO HTTP
+    // =========================
+
+    if (!response.ok) {
+
+        throw new Error(
+
+            data?.error ||
+            "Não foi possível conversar com a Nazuna."
+
+        );
+
+    }
+
+
+    return data;
 
 }
 
-if (!response.ok) {
 
-    throw new Error(
-        data?.error ||
-        "Não foi possível conversar com a Nazuna."
-    );
-
-}
-
-return data;
-
-}
-
-/* =========================
-PROCESSAR RESPOSTA
-========================= */
+// =========================
+// EXIBIR RESPOSTA DA IA
+// =========================
 
 function displayAIResponse(data) {
 
-const response =
-    data?.response;
+    const response =
+        data?.response;
 
-/*
-    FORMATO ATUAL:
 
-    response: [
-        {
-            id: "chat",
-            resp: "Olá!",
-            react: "👋"
-        }
-    ]
-*/
+    // =========================
+    // FORMATO DO BACKEND
+    // =========================
+    //
+    // response: [
+    //     {
+    //         id: "chat",
+    //         resp: "...",
+    //         react: "..."
+    //     }
+    // ]
+    //
+    // =========================
 
-if (
-    Array.isArray(response)
-) {
-
-    let displayed = false;
-
-    for (
-        const item of response
+    if (
+        Array.isArray(response)
     ) {
 
-        if (!item) {
-            continue;
-        }
+        let displayed =
+            false;
 
-        const text =
-            typeof item.resp === "string"
-                ? item.resp.trim()
-                : "";
+        response.forEach(
+            item => {
 
-        if (!text) {
-            continue;
-        }
+                if (!item) {
 
-        const react =
-            typeof item.react === "string"
-                ? item.react
-                : "";
+                    return;
 
-        addMessage(
-            text,
-            "ai",
-            react
+                }
+
+
+                const text =
+                    typeof item.resp === "string"
+                        ? item.resp.trim()
+                        : "";
+
+
+                if (!text) {
+
+                    return;
+
+                }
+
+
+                const react =
+                    typeof item.react === "string"
+                        ? item.react
+                        : "";
+
+
+                addMessage(
+                    text,
+                    "ai",
+                    react
+                );
+
+
+                displayed =
+                    true;
+
+            }
         );
 
-        displayed = true;
+
+        if (displayed) {
+
+            return;
+
+        }
+
     }
 
-    if (displayed) {
+
+    // =========================
+    // COMPATIBILIDADE
+    // =========================
+
+    if (
+        typeof response === "string" &&
+        response.trim()
+    ) {
+
+        addMessage(
+            response.trim(),
+            "ai"
+        );
+
         return;
+
     }
-}
 
-/*
-    COMPATIBILIDADE COM BACKEND ANTIGO
-*/
 
-if (
-    typeof response === "string" &&
-    response.trim()
-) {
+    // =========================
+    // RESPOSTA INVÁLIDA
+    // =========================
 
-    addMessage(
-        response.trim(),
-        "ai"
+    console.error(
+        "Resposta inesperada da API:",
+        data
     );
 
-    return;
-}
-
-/*
-    RESPOSTA INVÁLIDA
-*/
-
-console.error(
-    "Resposta inesperada da API:",
-    data
-);
-
-throw new Error(
-    "A resposta da Nazuna veio em um formato inesperado."
-);
+    throw new Error(
+        "A resposta da Nazuna veio em um formato inesperado."
+    );
 
 }
 
-/* =========================
-ENVIAR MENSAGEM
-========================= */
+
+// =========================
+// ENVIAR MENSAGEM
+// =========================
 
 async function sendMessage(message) {
 
-message =
-    message.trim();
+    message =
+        message.trim();
 
-if (
-    !message ||
-    isLoading
-) {
-
-    return;
-
-}
-
-/*
-    Mostra a mensagem do usuário
-    imediatamente.
-*/
-
-addMessage(
-    message,
-    "user"
-);
-
-/*
-    Limpa o input.
-*/
-
-messageInput.value = "";
-
-autoResizeInput();
-
-/*
-    Estado de carregamento.
-*/
-
-isLoading = true;
-
-sendButton.disabled = true;
-
-/*
-    Mostra o "Nazuna está digitando"
-    ANTES de chamar a API.
-*/
-
-showTyping();
-
-/*
-    Deixa o navegador atualizar a UI
-    antes da requisição.
-*/
-
-await new Promise(
-    resolve =>
-        requestAnimationFrame(resolve)
-);
-
-try {
-
-    /*
-        Chama o backend.
-    */
-
-    const data =
-        await sendToAI(message);
-
-    /*
-        Remove o typing assim que
-        a resposta chega.
-    */
-
-    removeTyping();
-
-    /*
-        Mostra a resposta.
-    */
-
-    displayAIResponse(data);
-
-    /*
-        Memória retornada pelo backend.
-    */
 
     if (
-        data?.aprender
+        !message ||
+        isLoading
     ) {
 
-        console.log(
-            "🧠 Informação identificada para memória:",
-            data.aprender
-        );
+        return;
 
     }
 
-} catch (error) {
+
+    // =========================
+    // USUÁRIO
+    // =========================
+
+    addMessage(
+        message,
+        "user"
+    );
+
+
+    // =========================
+    // LIMPAR INPUT
+    // =========================
+
+    messageInput.value =
+        "";
+
+    autoResizeInput();
+
+
+    // =========================
+    // LOADING
+    // =========================
+
+    isLoading =
+        true;
+
+    sendButton.disabled =
+        true;
+
+
+    // =========================
+    // TYPING
+    // =========================
+
+    showTyping();
+
+
+    // =========================
+    // DEIXAR UI ATUALIZAR
+    // =========================
+
+    await new Promise(
+        resolve =>
+            requestAnimationFrame(
+                resolve
+            )
+    );
+
+
+    try {
+
+        // =========================
+        // BACKEND
+        // =========================
+
+        const data =
+            await sendToAI(
+                message
+            );
+
+
+        // =========================
+        // REMOVER TYPING
+        // =========================
+
+        removeTyping();
+
+
+        // =========================
+        // RESPOSTA
+        // =========================
+
+        displayAIResponse(
+            data
+        );
+
+
+        // =========================
+        // MEMÓRIA
+        // =========================
+
+        if (
+            data?.aprender
+        ) {
+
+            console.log(
+                "🧠 Informação identificada para memória:",
+                data.aprender
+            );
+
+        }
+
+    } catch (error) {
+
+        // =========================
+        // ERRO
+        // =========================
+
+        removeTyping();
+
+        console.error(
+            "❌ Erro ao conversar com a Nazuna:",
+            error
+        );
+
+
+        addMessage(
+
+            "Não consegui falar com meu cérebro agora 😭~ Tenta novamente daqui a pouco.",
+
+            "ai"
+
+        );
+
+    } finally {
+
+        // =========================
+        // FINALIZAR LOADING
+        // =========================
+
+        isLoading =
+            false;
+
+        sendButton.disabled =
+            false;
+
+        messageInput.focus();
+
+    }
+
+}
+
+
+// =========================
+// FORMULÁRIO
+// =========================
+
+chatForm.addEventListener(
+    "submit",
+    event => {
+
+        event.preventDefault();
+
+        if (isLoading) {
+
+            return;
+
+        }
+
+        sendMessage(
+            messageInput.value
+        );
+
+    }
+);
+
+
+// =========================
+// ENTER
+// =========================
+
+messageInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            if (!isLoading) {
+
+                chatForm.requestSubmit();
+
+            }
+
+        }
+
+    }
+);
+
+
+// =========================
+// INPUT
+// =========================
+
+messageInput.addEventListener(
+    "input",
+    autoResizeInput
+);
+
+
+// =========================
+// SUGESTÕES
+// =========================
+
+suggestions.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                if (isLoading) {
+
+                    return;
+
+                }
+
+
+                const message =
+                    button.dataset.message;
+
+
+                if (
+                    message &&
+                    message.trim()
+                ) {
+
+                    sendMessage(
+                        message
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+// =========================
+// NOVA CONVERSA
+// =========================
+
+function newConversation() {
 
     removeTyping();
 
-    console.error(
-        "❌ Erro ao conversar com a Nazuna:",
-        error
+    messages.innerHTML =
+        "";
+
+    welcome.style.display =
+        "block";
+
+    messageInput.value =
+        "";
+
+    autoResizeInput();
+
+    isLoading =
+        false;
+
+    sendButton.disabled =
+        false;
+
+    sidebar.classList.remove(
+        "open"
     );
-
-    addMessage(
-        "Não consegui falar com meu cérebro agora 😭~ Tenta novamente daqui a pouco.",
-        "ai"
-    );
-
-} finally {
-
-    isLoading = false;
-
-    sendButton.disabled = false;
 
     messageInput.focus();
 
 }
 
-}
-
-/* =========================
-FORMULÁRIO
-========================= */
-
-chatForm.addEventListener(
-"submit",
-event => {
-
-    event.preventDefault();
-
-    if (isLoading) {
-        return;
-    }
-
-    sendMessage(
-        messageInput.value
-    );
-
-}
-
-);
-
-/* =========================
-ENTER
-========================= */
-
-messageInput.addEventListener(
-"keydown",
-event => {
-
-    if (
-        event.key === "Enter" &&
-        !event.shiftKey
-    ) {
-
-        event.preventDefault();
-
-        if (!isLoading) {
-
-            chatForm.requestSubmit();
-
-        }
-
-    }
-
-}
-
-);
-
-/* =========================
-INPUT
-========================= */
-
-messageInput.addEventListener(
-"input",
-autoResizeInput
-);
-
-/* =========================
-SUGESTÕES
-========================= */
-
-suggestions.forEach(
-button => {
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            if (isLoading) {
-                return;
-            }
-
-            const message =
-                button.dataset.message;
-
-            if (
-                message &&
-                message.trim()
-            ) {
-
-                sendMessage(
-                    message
-                );
-
-            }
-
-        }
-    );
-
-}
-
-);
-
-/* =========================
-NOVA CONVERSA
-========================= */
-
-function newConversation() {
-
-removeTyping();
-
-messages.innerHTML = "";
-
-welcome.style.display =
-    "block";
-
-messageInput.value = "";
-
-autoResizeInput();
-
-isLoading = false;
-
-sendButton.disabled = false;
-
-sidebar.classList.remove(
-    "open"
-);
-
-messageInput.focus();
-
-}
 
 newChatButton.addEventListener(
-"click",
-newConversation
+    "click",
+    newConversation
 );
+
 
 clearChatButton.addEventListener(
-"click",
-newConversation
+    "click",
+    newConversation
 );
 
-/* =========================
-MENU MOBILE
-========================= */
+
+// =========================
+// MENU MOBILE
+// =========================
 
 menuButton.addEventListener(
-"click",
-event => {
+    "click",
+    event => {
 
-    event.stopPropagation();
+        event.stopPropagation();
 
-    sidebar.classList.toggle(
-        "open"
-    );
+        sidebar.classList.toggle(
+            "open"
+        );
 
-}
-
+    }
 );
+
 
 chat.addEventListener(
-"click",
-() => {
+    "click",
+    () => {
 
-    sidebar.classList.remove(
-        "open"
-    );
+        sidebar.classList.remove(
+            "open"
+        );
 
-}
-
+    }
 );
 
-/* =========================
-HISTÓRICO
-========================= */
+
+// =========================
+// HISTÓRICO
+// =========================
 
 historyList.addEventListener(
-"click",
-event => {
+    "click",
+    event => {
 
-    const item =
-        event.target.closest(
-            ".history-item"
+        const item =
+            event.target.closest(
+                ".history-item"
+            );
+
+        if (!item) {
+
+            return;
+
+        }
+
+
+        document
+            .querySelectorAll(
+                ".history-item"
+            )
+            .forEach(
+                button => {
+
+                    button.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+        item.classList.add(
+            "active"
         );
 
-    if (!item) {
-        return;
+
+        sidebar.classList.remove(
+            "open"
+        );
+
     }
-
-    document
-        .querySelectorAll(
-            ".history-item"
-        )
-        .forEach(
-            button => {
-
-                button.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-    item.classList.add(
-        "active"
-    );
-
-    sidebar.classList.remove(
-        "open"
-    );
-
-}
-
 );
 
-/* =========================
-INICIALIZAÇÃO
-========================= */
+
+// =========================
+// INICIALIZAÇÃO
+// =========================
 
 autoResizeInput();
 
-messageInput.focus();
+
+// =========================
+// NOME
+// =========================
+
+if (!userName) {
+
+    showNameModal();
+
+} else {
+
+    messageInput.focus();
+
+}
+
 
 console.log(
-"Nazuna AI frontend carregado ✨"
+    "🌙 Nazuna AI frontend carregado."
 );
