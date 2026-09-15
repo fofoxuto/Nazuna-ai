@@ -1,96 +1,64 @@
-// =========================
-// DEPENDÊNCIAS
-// =========================
+require("dotenv").config();
 
 const express = require("express");
+const cors = require("cors");
+const path = require("path");
+
+const chatRoutes = require("./routes/chat.routes");
+const healthRoutes = require("./routes/health.routes");
 
 const {
-    PORT
-} = require("./config/env");
+    testDatabaseConnection
+} = require("./config/database");
 
-const configureServer =
-    require("./config/server.config");
+const app = express();
 
-const chatRoutes =
-    require("./routes/chat.routes");
+const PORT = process.env.PORT || 3000;
 
-const healthRoutes =
-    require("./routes/health.routes");
+app.use(cors());
 
-const errorMiddleware =
-    require("./middleware/error.middleware");
+app.use(express.json());
 
-// =========================
-// APLICAÇÃO
-// =========================
+app.use(express.urlencoded({
+    extended: true
+}));
 
-const app =
-    express();
+app.use(express.static(
+    path.join(__dirname, "public")
+));
 
-// =========================
-// CONFIGURAÇÃO DO SERVIDOR
-// =========================
+app.use("/api/chat", chatRoutes);
+app.use("/api", healthRoutes);
 
-configureServer(app);
+app.get("/", (req, res) => {
+    res.sendFile(
+        path.join(
+            __dirname,
+            "public",
+            "index.html"
+        )
+    );
+});
 
-// =========================
-// ROTAS
-// =========================
+async function startServer() {
+    try {
+        await testDatabaseConnection();
 
-app.use(
-    "/api",
-    chatRoutes
-);
-
-app.use(
-    "/api",
-    healthRoutes
-);
-
-// =========================
-// 404 DA API
-// =========================
-
-app.use(
-    "/api",
-    (req, res) => {
-
-        res.status(404).json({
-
-            error:
-                "Endpoint não encontrado."
-
+        app.listen(PORT, () => {
+            console.log(
+                `🚀 Nazuna-ai rodando na porta ${PORT}`
+            );
         });
 
+    } catch (error) {
+        console.error(
+            "❌ [SERVER] Falha ao conectar ao PostgreSQL:"
+        );
+
+        console.error(error);
+
+        process.exit(1);
     }
-);
+}
 
-// =========================
-// ERRO GLOBAL
-// =========================
-
-app.use(
-    errorMiddleware
-);
-
-// =========================
-// INICIAR SERVIDOR
-// =========================
-
-app.listen(
-    PORT,
-    () => {
-
-        console.log(`
-
-╭────────────────────────────────╮
-│          NAZUNA AI             │
-│                                │
-│  Server: http://localhost:${PORT}
-│  Status: ONLINE                │
-╰────────────────────────────────╯
-
-        `);
-
-    }
-);
+startServer();

@@ -1,197 +1,119 @@
-// =========================
-// DEPENDÊNCIAS
-// =========================
-
+const { generateResponse } = require("../ai/gemini");
+const { parseNazunaResponse } = require("../utils/parser");
 const {
-    generateGeminiResponse
-} = require("../ai/gemini");
-
-const nazunaInstructions =
-    require("../prompts/nazuna.instructions");
-
-const {
-    parseNazunaResponse
-} = require("../parsers/nazuna.parser");
-
-// =========================
-// CHAT CONTROLLER
-// =========================
+    applyLearning,
+    buildMemoryContext
+} = require("../memory/memory.store");
+const { nazunaInstructions } = require("../prompts/nazuna.instructions");
 
 async function chatController(req, res) {
-
-    console.log(
-        "📩 /api/chat recebeu uma mensagem."
-    );
-
     try {
-
-        // =========================
-        // MENSAGEM
-        // =========================
-
-        const {
-            message
-        } = req.body;
-
-        // =========================
-        // VALIDAÇÃO
-        // =========================
+        const { message, userId } = req.body;
 
         if (
             typeof message !== "string" ||
             !message.trim()
         ) {
-
-            console.log(
-                "⚠️ Mensagem inválida."
-            );
-
             return res.status(400).json({
-
-                error:
-                    "Mensagem inválida."
-
+                error: "Mensagem inválida."
             });
-
         }
 
         if (
-            message.length > 10000
+            typeof userId !== "string" ||
+            !/^[a-f0-9-]{36}$/i.test(userId.trim())
         ) {
-
             return res.status(400).json({
-
-                error:
-                    "Mensagem muito grande."
-
+                error: "User ID inválido."
             });
-
         }
 
-        const cleanMessage =
-            message.trim();
+        const cleanMessage = message.trim();
+        const cleanUserId = userId.trim();
 
         console.log(
-            "💬 Mensagem recebida."
+            `💬 [CHAT] Mensagem recebida de ${cleanUserId}`
         );
 
-        // =========================
-        // GEMINI
-        // =========================
+        const memoryContext =
+            await buildMemoryContext(cleanUserId);
 
-        console.log(
-            "🤖 Enviando mensagem para Gemini..."
+        const instructions = [
+            nazunaInstructions,
+            "",
+            "────────────────────────────────────",
+            "MEMÓRIA PERSISTENTE DO USUÁRIO",
+            "────────────────────────────────────",
+            memoryContext,
+            "",
+            "Use essas informações somente quando forem relevantes.",
+            "Não invente memórias que não estejam presentes."
+        ].join("\n");
+
+        const rawResponse = await generateResponse(
+            cleanMessage,
+            instructions
         );
-
-        const rawReply =
-            await generateGeminiResponse({
-
-                systemInstruction:
-                    nazunaInstructions,
-
-                message:
-                    cleanMessage
-
-            });
-
-        // =========================
-        // PROCESSAR RESPOSTA
-        // =========================
 
         const nazuna =
-            parseNazunaResponse(
-                rawReply
-            );
+            parseNazunaResponse(rawResponse);
 
-        if (
-            !nazuna.response ||
-            nazuna.response.length === 0
-        ) {
-
+        if (!nazuna) {
             console.error(
-                "❌ Não foi possível extrair a resposta da Nazuna."
+                "❌ [CHAT] Não foi possível interpretar a resposta da Nazuna."
             );
 
-            return res.status(502).json({
-
-                error:
-                    "Não foi possível interpretar a resposta da IA."
-
+            return res.status(500).json({
+                error: "Resposta da IA inválida."
             });
-
         }
 
-        console.log(
-            "🧠 Resposta interpretada:",
-            nazuna.json
-                ? "JSON"
-                : "TEXTO"
-        );
-
-        // =========================
-        // MEMÓRIA
-        // =========================
+        let memoryResult = null;
 
         if (nazuna.aprender) {
-
-            console.log(
-                "📝 Nazuna identificou informação para memória:"
+            memoryResult = await applyLearning(
+                cleanUserId,
+                nazuna.aprender
             );
-
-            console.log(
-                JSON.stringify(
-                    nazuna.aprender,
-                    null,
-                    2
-                )
-            );
-
         }
 
-        // =========================
-        // RESPOSTA
-        // =========================
-
         console.log(
-            "✅ Nazuna respondeu com sucesso!"
+            "🤖 [CHAT] Resposta processada com sucesso."
         );
 
+        if (memoryResult) {
+            console.log(
+                "🧠 [CHAT] Resultado da memória:",
+                memoryResult
+            );
+        }
+
         return res.json({
-
-            response:
-                nazuna.response,
-
-            aprender:
-                nazuna.aprender
-
+            response: nazuna.response,
+            aprender: nazuna.aprender,
+            memory: memoryResult
+                ? {
+                    success: memoryResult.success,
+                    action:
+                        memoryResult.action || null,
+                    reason:
+                        memoryResult.reason || null
+                }
+                : null
         });
 
     } catch (error) {
-
         console.error(
-            "💥 Erro no chatController:"
-        );
-
-        console.error(
+            "❌ [CHAT] Erro no processamento:",
             error
         );
 
         return res.status(500).json({
-
-            error:
-                "Erro interno do servidor."
-
+            error: "Erro interno do servidor."
         });
-
     }
-
 }
-
-// =========================
-// EXPORT
-// =========================
 
 module.exports = {
     chatController
 };
-
