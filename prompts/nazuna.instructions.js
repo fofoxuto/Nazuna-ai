@@ -526,9 +526,10 @@ Se não houver memória para salvar, use:
 
 `;
 
-
 // =========================
 // EXPORT
 // =========================
 
-module.exports = nazunaInstructions;
+module.exports = {
+    nazunaInstructions
+};

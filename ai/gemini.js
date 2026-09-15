@@ -36,11 +36,6 @@ async function generateResponse(
     // REQUEST
     // =========================
 
-console.log(
-    "🧠 [SYSTEM INSTRUCTION]:",
-    systemInstruction
-);
-
     const response =
         await fetch(
             url,
