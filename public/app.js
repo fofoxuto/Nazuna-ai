@@ -55,6 +55,47 @@ let isLoading = false;
 
 
 // =========================
+// IDENTIDADE DO USUÁRIO
+// =========================
+
+const USER_ID_KEY =
+    "nazunaUserId";
+
+function getUserId() {
+
+    let id =
+        localStorage.getItem(
+            USER_ID_KEY
+        );
+
+    if (id) {
+
+        return id;
+
+    }
+
+    id =
+        crypto.randomUUID();
+
+    localStorage.setItem(
+        USER_ID_KEY,
+        id
+    );
+
+    console.log(
+        "🆔 [USER] Novo ID criado:",
+        id
+    );
+
+    return id;
+
+}
+
+const userId =
+    getUserId();
+
+
+// =========================
 // NOME DO USUÁRIO
 // =========================
 
@@ -108,20 +149,12 @@ function showNameModal() {
     }
 
 
-    // =========================
-    // OVERLAY
-    // =========================
-
     const overlay =
         document.createElement("div");
 
     overlay.className =
         "name-modal-overlay";
 
-
-    // =========================
-    // MODAL
-    // =========================
 
     const modal =
         document.createElement("div");
@@ -130,10 +163,6 @@ function showNameModal() {
         "name-modal";
 
 
-    // =========================
-    // TÍTULO
-    // =========================
-
     const title =
         document.createElement("h2");
 
@@ -141,20 +170,12 @@ function showNameModal() {
         "Como posso te chamar? 💜";
 
 
-    // =========================
-    // DESCRIÇÃO
-    // =========================
-
     const description =
         document.createElement("p");
 
     description.textContent =
         "Só pra eu saber como chamar você por aqui.";
 
-
-    // =========================
-    // INPUT
-    // =========================
 
     const input =
         document.createElement("input");
@@ -172,10 +193,6 @@ function showNameModal() {
         "name";
 
 
-    // =========================
-    // BOTÃO
-    // =========================
-
     const button =
         document.createElement("button");
 
@@ -185,10 +202,6 @@ function showNameModal() {
     button.textContent =
         "Continuar";
 
-
-    // =========================
-    // FUNÇÃO CONFIRMAR
-    // =========================
 
     function confirmName() {
 
@@ -233,10 +246,6 @@ function showNameModal() {
     }
 
 
-    // =========================
-    // ENTER
-    // =========================
-
     input.addEventListener(
         "keydown",
         event => {
@@ -255,10 +264,6 @@ function showNameModal() {
     );
 
 
-    // =========================
-    // REMOVER ERRO AO DIGITAR
-    // =========================
-
     input.addEventListener(
         "input",
         () => {
@@ -271,19 +276,11 @@ function showNameModal() {
     );
 
 
-    // =========================
-    // BOTÃO
-    // =========================
-
     button.addEventListener(
         "click",
         confirmName
     );
 
-
-    // =========================
-    // MONTAR
-    // =========================
 
     modal.appendChild(
         title
@@ -309,10 +306,6 @@ function showNameModal() {
         overlay
     );
 
-
-    // =========================
-    // ANIMAÇÃO
-    // =========================
 
     requestAnimationFrame(
         () => {
@@ -407,10 +400,6 @@ function addMessage(
         `message ${type}`;
 
 
-    // =========================
-    // AVATAR
-    // =========================
-
     const avatar =
         document.createElement("div");
 
@@ -427,20 +416,12 @@ function addMessage(
             );
 
 
-    // =========================
-    // CONTEÚDO
-    // =========================
-
     const messageContent =
         document.createElement("div");
 
     messageContent.className =
         "message-content";
 
-
-    // =========================
-    // NOME
-    // =========================
 
     const name =
         document.createElement("div");
@@ -453,10 +434,6 @@ function addMessage(
             ? "Nazuna"
             : getUserName();
 
-
-    // =========================
-    // TEXTO
-    // =========================
 
     const text =
         document.createElement("div");
@@ -481,10 +458,6 @@ function addMessage(
     );
 
 
-    // =========================
-    // REAÇÃO
-    // =========================
-
     if (
         type === "ai" &&
         typeof react === "string" &&
@@ -506,10 +479,6 @@ function addMessage(
 
     }
 
-
-    // =========================
-    // MONTAR
-    // =========================
 
     message.appendChild(
         avatar
@@ -634,17 +603,16 @@ async function sendToAI(message) {
                     JSON.stringify({
 
                         message:
-                            message
+                            message,
+
+                        userId:
+                            userId
 
                     })
 
             }
         );
 
-
-    // =========================
-    // LER RESPOSTA
-    // =========================
 
     let data;
 
@@ -661,10 +629,6 @@ async function sendToAI(message) {
 
     }
 
-
-    // =========================
-    // ERRO HTTP
-    // =========================
 
     if (!response.ok) {
 
@@ -692,20 +656,6 @@ function displayAIResponse(data) {
     const response =
         data?.response;
 
-
-    // =========================
-    // FORMATO DO BACKEND
-    // =========================
-    //
-    // response: [
-    //     {
-    //         id: "chat",
-    //         resp: "...",
-    //         react: "..."
-    //     }
-    // ]
-    //
-    // =========================
 
     if (
         Array.isArray(response)
@@ -766,10 +716,6 @@ function displayAIResponse(data) {
     }
 
 
-    // =========================
-    // COMPATIBILIDADE
-    // =========================
-
     if (
         typeof response === "string" &&
         response.trim()
@@ -784,10 +730,6 @@ function displayAIResponse(data) {
 
     }
 
-
-    // =========================
-    // RESPOSTA INVÁLIDA
-    // =========================
 
     console.error(
         "Resposta inesperada da API:",
@@ -821,29 +763,17 @@ async function sendMessage(message) {
     }
 
 
-    // =========================
-    // USUÁRIO
-    // =========================
-
     addMessage(
         message,
         "user"
     );
 
 
-    // =========================
-    // LIMPAR INPUT
-    // =========================
-
     messageInput.value =
         "";
 
     autoResizeInput();
 
-
-    // =========================
-    // LOADING
-    // =========================
 
     isLoading =
         true;
@@ -852,16 +782,8 @@ async function sendMessage(message) {
         true;
 
 
-    // =========================
-    // TYPING
-    // =========================
-
     showTyping();
 
-
-    // =========================
-    // DEIXAR UI ATUALIZAR
-    // =========================
 
     await new Promise(
         resolve =>
@@ -873,35 +795,19 @@ async function sendMessage(message) {
 
     try {
 
-        // =========================
-        // BACKEND
-        // =========================
-
         const data =
             await sendToAI(
                 message
             );
 
 
-        // =========================
-        // REMOVER TYPING
-        // =========================
-
         removeTyping();
 
-
-        // =========================
-        // RESPOSTA
-        // =========================
 
         displayAIResponse(
             data
         );
 
-
-        // =========================
-        // MEMÓRIA
-        // =========================
 
         if (
             data?.aprender
@@ -915,10 +821,6 @@ async function sendMessage(message) {
         }
 
     } catch (error) {
-
-        // =========================
-        // ERRO
-        // =========================
 
         removeTyping();
 
@@ -937,10 +839,6 @@ async function sendMessage(message) {
         );
 
     } finally {
-
-        // =========================
-        // FINALIZAR LOADING
-        // =========================
 
         isLoading =
             false;
@@ -1204,4 +1102,9 @@ if (!userName) {
 
 console.log(
     "🌙 Nazuna AI frontend carregado."
+);
+
+console.log(
+    "🆔 [USER] ID atual:",
+    userId
 );

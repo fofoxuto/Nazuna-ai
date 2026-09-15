@@ -8,7 +8,7 @@ const { nazunaInstructions } = require("../prompts/nazuna.instructions");
 
 async function chatController(req, res) {
     try {
-        const { message, userId } = req.body;
+        const { message, userId } = req.;
 
         if (
             typeof message !== "string" ||

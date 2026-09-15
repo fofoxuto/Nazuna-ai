@@ -47,7 +47,7 @@ async function generateGeminiResponse({
 
                 },
 
-                body:
+                :
                     JSON.stringify({
 
                         systemInstruction: {
