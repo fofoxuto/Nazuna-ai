@@ -182,7 +182,12 @@ async function generateResponse(
     }
 
 
-    return rawReply;
+    console.log(
+    "🧪 [GEMINI RAW]:",
+    rawReply
+);
+
+return rawReply;
 
 }
 
