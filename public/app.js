@@ -1,4 +1,12 @@
 // =========================
+// CONFIGURAÇÃO DA API
+// =========================
+
+const API_URL =
+    "https://nazuna-ai.onrender.com";
+
+
+// =========================
 // ELEMENTOS
 // =========================
 
@@ -92,9 +100,6 @@ function saveUserName(name) {
 // =========================
 
 function showNameModal() {
-
-    // Se já existe nome,
-    // não precisa perguntar novamente.
 
     if (userName) {
 
@@ -612,7 +617,7 @@ async function sendToAI(message) {
 
     const response =
         await fetch(
-            "/api/chat",
+            `${API_URL}/api/chat`,
             {
 
                 method:
